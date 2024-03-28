@@ -13,7 +13,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const { currentUser, setCurrentUser, setUsers, users } = useData();
+  const { currentUser, setCurrentUser, setUsers, users, setRollno } = useData();
 
   useEffect(() => {
     if (currentUser) {
@@ -31,31 +31,38 @@ export default function Login() {
     }
     setLoading(true);
 
-    getCookie(user, password).then((res) => {
-      console.log(res);
-      const cookieData = res as {
-        cookie: string;
-        expire: string;
-        role: string;
-      };
-
-      if (res) {
-        setError(false);
+    getCookie(user, password)
+      .then((res) => {
         console.log(res);
-        router.replace("/");
-
-        const newUser = {
-          ...cookieData,
-          user,
-          password,
+        const cookieData = res as {
+          cookie: string;
+          expire: string;
+          role: string;
         };
-        setUsers((prvUsers) => [...prvUsers, newUser]);
-        setCurrentUser(newUser);
-      } else {
+
+        if (res) {
+          setError(false);
+          console.log(res);
+          router.replace("/");
+
+          const newUser = {
+            ...cookieData,
+            user,
+            password,
+          };
+          setUsers((prvUsers) => [...prvUsers, newUser]);
+          setCurrentUser(newUser);
+          setRollno(newUser.user);
+        } else {
+          setError(true);
+        }
+      })
+      .catch((e) => {
         setError(true);
-      }
-      setLoading(false);
-    });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
@@ -89,7 +96,4 @@ export default function Login() {
   );
 }
 
-
-function FormatDate(){
-    
-}
+function FormatDate() {}

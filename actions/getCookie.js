@@ -55,11 +55,15 @@ export default async function getCookie(username, password) {
         let cookies = httpResponse.headers["set-cookie"].map((cookie) => {
           return cookie.split(";")[0];
         });
-        resolve({
+
+        const cookieItem = {
           cookie: cookies.join(";"),
           role,
           expire: new Date().getTime(),
-        });
+        };
+        if (!cookieItem.cookie.includes("frmAuth")) reject("error");
+        console.log(cookieItem);
+        resolve(cookieItem);
       }
     );
   });

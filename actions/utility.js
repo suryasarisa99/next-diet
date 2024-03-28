@@ -4,13 +4,10 @@ import cheerio from "cheerio";
 
 export async function parseTableAsObjects(table, $) {
   let trs = table.find("tr");
-  console.log("trs length: ", trs.length);
   let data = [];
   const keys = ["subject", "held", "attend", "percent"];
 
   let lastRow = trs.last();
-
-  console.log("inside parseTableAs Objects fun: ");
 
   trs
     .slice(1)
@@ -19,7 +16,6 @@ export async function parseTableAsObjects(table, $) {
       let tds = $(tr).find("td");
       let tdData = {};
       tds.slice(1).each((i, td) => {
-        console.log($(td).text());
         if (i > 0) {
           tdData[keys[i]] = +$(td).text();
         } else {
@@ -35,8 +31,6 @@ export async function parseTableAsObjects(table, $) {
   lastRowTds.each((i, td) => {
     tdData[keys[i]] = $(td).text();
   });
-  console.log("data", data);
-
   return {
     data,
     total: tdData,
