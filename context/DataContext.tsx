@@ -66,7 +66,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [attendance, setAttendance] = useState<AttendanceType>({
     bio: {},
     data: [],
-    total: {},
+    total: {
+      subject: "",
+      held: "",
+      attend: "",
+      percent: "",
+    },
   });
   const [currentUser, setCurrentUser] = useState<UserDataType | null>(null);
   const [subjectsGraphData, setSubjectsGraphData] = useState<SubjectsGraphType>(
