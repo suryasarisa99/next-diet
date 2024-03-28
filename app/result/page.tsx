@@ -1,9 +1,10 @@
 "use client";
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback, Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import getAttendence from "@/actions/getAttendance";
 import getGraph from "@/actions/getGraph";
 import getCookie from "@/actions/getCookie";
+import Skeleton from "react-loading-skeleton";
 import {
   AttendanceType,
   FormatDate,
@@ -38,6 +39,7 @@ function ResultPage() {
   const to = params.get("to");
   const month = params.get("month");
   const week = params.get("week");
+  const subjectGraphRef = useRef<HTMLDivElement>(null);
   const [selectedSubject, setSelectedSubject] = useState<number>(0);
   const {
     currentUser,
@@ -165,9 +167,11 @@ function ResultPage() {
             break;
           }
           case "this": {
+            getThisWeekAttendace();
             break;
           }
           case "bweek": {
+            getBWeekAttendace();
             break;
           }
         }
@@ -197,16 +201,66 @@ function ResultPage() {
     handleAttendance(d, d);
   }
 
-  if (attendance.bio.RollNo != rollno) {
-    return <div>Loading...{attendance.bio?.RollNo}</div>;
+  function getThisWeekAttendace() {
+    /*
+        - 6 and + 1 are for making monday as first of week, instead of sunday.
+        if todya is sunday, means day is 0, so we subtract 6 to get prv monday
+        else subtract the day + 1 to get monday
+    */
+
+    let date = new Date();
+    let day = date.getDay();
+    let from = new Date(date);
+    let to = new Date(date);
+    if (day == 0) {
+      from.setDate(date.getDate() - 6);
+      to.setDate(date.getDate());
+    } else {
+      from.setDate(date.getDate() - day + 1);
+      to.setDate(date.getDate() + (6 - day + 1));
+    }
+    from.setHours(0, 0, 0, 0);
+    from.setMinutes(0);
+    to.setHours(0, 0, 0, 0);
+    to.setMinutes(0);
+    console.log(from, to);
+    handleAttendance(FormatDate(from.toString()), FormatDate(to.toString()));
   }
+
+  function getBWeekAttendace() {
+    let date = new Date();
+    let day = date.getDay();
+    let from = new Date(date);
+    let to = new Date(date);
+    if (day == 0) {
+      from.setDate(date.getDate() - 6 - 7);
+      to.setDate(date.getDate() - 6 - 1);
+    } else {
+      from.setDate(date.getDate() - day - 7 + 1);
+      to.setDate(date.getDate() - day + 1 + 1);
+    }
+    from.setHours(0, 0, 0, 0);
+    from.setMinutes(0);
+    to.setHours(0, 0, 0, 0);
+    to.setMinutes(0);
+    console.log(from, to);
+    handleAttendance(FormatDate(from.toString()), FormatDate(to.toString()));
+  }
+
+  // if (attendance.bio.RollNo != rollno) {
+  //   return (
+  //     <div className="loading-page">
+  //       <span className="loader"></span>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="results-page">
       <div className="graph-boxes">
         <div className="graph">
-          {graphData.length > 0 && (
-            <ResponsiveContainer width={"100%"} height={350}>
+          {graphData.length > 0 ? (
+            <ResponsiveContainer width={"100%"} height={320}>
               <LineChart data={graphData}>
                 <Line
                   type="monotone"
@@ -237,36 +291,55 @@ function ResultPage() {
                 />
               </LineChart>
             </ResponsiveContainer>
+          ) : (
+            <div className="skt-lg">
+              <div className="skt"></div>
+            </div>
           )}
         </div>
 
         <div className="subjects">
-          {subjectsGraphData
-            .filter((subjectGraphData) => {
-              return subjectGraphData.some((subject) => {
-                return +subject.held > 0;
-              });
-            })
-            .map((subjectGraphData, sub_index) => {
-              return (
-                <p
-                  key={subjectGraphData[0].subject}
-                  className={selectedSubject == sub_index ? "selected" : ""}
-                  onClick={() => {
-                    setSelectedSubject(sub_index);
-                  }}
-                >
-                  {subjectGraphData[0].subject}{" "}
-                </p>
-              );
-            })}
+          {subjectsGraphData.length > 0
+            ? subjectsGraphData
+                .filter((subjectGraphData) => {
+                  return subjectGraphData.some((subject) => {
+                    return +subject.held > 0;
+                  });
+                })
+                .map((subjectGraphData, sub_index) => {
+                  return (
+                    <p
+                      key={subjectGraphData[0].subject}
+                      className={selectedSubject == sub_index ? "selected" : ""}
+                      onClick={() => {
+                        if (subjectGraphRef.current)
+                          subjectGraphRef.current.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                          });
+                        setSelectedSubject(sub_index);
+                      }}
+                    >
+                      {subjectGraphData[0].subject}{" "}
+                    </p>
+                  );
+                })
+            : Array(5)
+                .fill(0)
+                .map((_, i) => {
+                  return (
+                    <div className="skt-sm" key={i}>
+                      <div className="skt"> </div>
+                    </div>
+                  );
+                })}
         </div>
 
-        <div className="graph">
-          {selectedSubject > -1 && subjectsGraphData.length > 0 && (
+        <div className="graph" ref={subjectGraphRef}>
+          {selectedSubject > -1 && subjectsGraphData.length > 0 ? (
             <ResponsiveContainer
               width={"100%"}
-              height={350}
+              height={320}
               key={subjectsGraphData[selectedSubject][0].subject}
             >
               <LineChart
@@ -305,6 +378,10 @@ function ResultPage() {
                 />
               </LineChart>
             </ResponsiveContainer>
+          ) : (
+            <div className="skt-lg">
+              <div className="skt"></div>
+            </div>
           )}
         </div>
       </div>
@@ -326,7 +403,7 @@ function ResultPage() {
           </div>
           <div className="semester">
             <p className="label">Semester</p>
-            <p className="value">{attendance.bio.Semester.substr(0, 2)}</p>
+            <p className="value">{attendance.bio.Semester?.substr(0, 2)}</p>
           </div>
           {/* </div> */}
         </div>

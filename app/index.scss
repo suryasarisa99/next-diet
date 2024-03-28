@@ -18,6 +18,11 @@ html {
   color-scheme: dark light;
 }
 
+body {
+  font-family: sans-serif;
+  background-color: black;
+}
+
 @mixin mobile-sm {
   @media (max-width: 350px) {
     @content;
@@ -65,7 +70,7 @@ html {
     @include desktop() {
       flex-direction: row;
       width: 80%;
-      background-color: #222222;
+      background-color: #2a2a36;
       align-items: center;
       padding: 20px;
       justify-content: space-around;
@@ -387,6 +392,71 @@ html {
   }
 }
 
+// .skt {
+//   animation: skeleton-card 1s linear infinite alternate;
+//   width: 300px;
+//   height: 300px;
+// }
+
+// @keyframes skeleton-card {
+//   // 0% {
+//   //   background-color: hsl(200, 20%, 70%);
+//   // }
+//   // 100% {
+//   //   background-color: hsl(200, 20%, 95%);
+//   // }
+//   // for dark color:
+//   // ;
+//   0%{
+//     background-color:
+//   }
+// }
+
+.skt-sm {
+  display: flex;
+  justify-content: center;
+  height: 30px;
+  min-width: 90px;
+  flex-shrink: 0;
+}
+.skt-lg {
+  width: 90%;
+  height: 320px;
+  flex-shrink: 0;
+}
+.skt {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  background: rgb(18, 18, 18);
+}
+
+.skt::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    hsl(0%, 0%, 10%),
+    transparent
+  );
+  animation: skeleton-card 0.8s infinite ease-in-out;
+}
+
+@keyframes skeleton-card {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
 body {
   padding: 0;
 }
@@ -403,19 +473,23 @@ body {
     flex-direction: column;
     width: 35%;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
+    padding-top: 40px;
     // background-color: green;
   }
   .graph-boxes {
     // background-color: red;
     overflow-y: hidden;
     // overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     flex-grow: 1;
     user-select: none;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: start;
 
     .graph {
       // min-width: 600px;
@@ -463,6 +537,7 @@ body {
     // min-width: 40%;
     padding: 10px 0;
     // background-color: red;
+    padding-bottom: 30px;
 
     div {
       display: flex;
@@ -614,9 +689,7 @@ body {
     }
 
     svg.recharts-surface {
-      margin-left: -60px;
-      margin-right: 0;
-      // width: 110%;
+      margin-left: -30px;
     }
   }
 
@@ -649,6 +722,7 @@ body {
       .bio {
         padding-left: 10px;
         padding-block: 4px;
+        padding-bottom: 30px;
         margin: 0px;
       }
     }

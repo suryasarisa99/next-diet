@@ -8,6 +8,7 @@ import Link from "next/link";
 import useData from "@/context/DataContext";
 import { FormatDate } from "@/context/DataContext";
 
+import Skeleton from "react-loading-skeleton";
 export default function Home() {
   const router = useRouter();
   const [month, setMonth] = useState("");

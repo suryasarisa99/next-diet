@@ -9,3 +9,4 @@ const withPWA = pwa({
 const nextConfig = {};
 
 export default withPWA(nextConfig);
+// export default nextConfig;
