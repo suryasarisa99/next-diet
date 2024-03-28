@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import getAttendence from "@/actions/getAttendance";
 import getGraph from "@/actions/getGraph";
@@ -16,6 +16,12 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import useData from "@/context/DataContext";
+
+export default function Wrapper() {
+  <Suspense>
+    <ResultPage />
+  </Suspense>;
+}
 
 function ResultPage() {
   const params = useSearchParams();
@@ -305,5 +311,3 @@ function ResultPage() {
     </div>
   );
 }
-
-export default ResultPage;
