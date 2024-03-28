@@ -8,11 +8,6 @@ import Link from "next/link";
 import useData from "@/context/DataContext";
 import { FormatDate } from "@/context/DataContext";
 
-export async function Data() {
-  const data = await getFakeData();
-  return <p> {data}</p>;
-}
-
 export default function Home() {
   const router = useRouter();
   const [month, setMonth] = useState("");
