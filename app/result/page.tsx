@@ -18,9 +18,11 @@ import {
 import useData from "@/context/DataContext";
 
 export default function Wrapper() {
-  <Suspense>
-    <ResultPage />
-  </Suspense>;
+  return (
+    <Suspense>
+      <ResultPage />
+    </Suspense>
+  );
 }
 
 function ResultPage() {
