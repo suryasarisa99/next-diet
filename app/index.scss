@@ -3,7 +3,7 @@
   margin: 0;
   box-sizing: border-box;
 }
-#root {
+:root {
   padding: 0px;
   margin: 0;
   // --primary-color: #c2a2fc;
@@ -535,6 +535,7 @@ body {
         margin-bottom: 12px;
       }
       .cell {
+        text-align: center;
         &:first-child {
         }
         &:last-child {
