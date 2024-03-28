@@ -47,13 +47,24 @@ function ResultPage() {
     setAttendance,
     setGraphData,
     setSubjectsGraphData,
+    users,
+    setUsers,
     graphData,
     subjectsGraphData,
+    setCurrentUser,
   } = useData();
-  const [sortOn, setSortOn] = useState<string>("percent");
+
+  type SortONType = "subject" | "held" | "attend" | "percent";
+
+  const [sortOn, setSortOn] = useState<SortONType>("percent");
 
   const handleAttendance = useCallback(
-    (from: string | null = "", to: string | null = "") => {
+    (
+      from: string | null = "",
+      to: string | null = "",
+      cookie_param: string | null = "",
+      count: number = 0
+    ) => {
       if (!rollno || !currentUser?.cookie) {
         console.log("returning: ", rollno, currentUser?.cookie);
         return;
@@ -63,14 +74,43 @@ function ResultPage() {
 
       getAttendence({
         rollNo: rollno,
-        cookie: currentUser?.cookie || "",
+        cookie: cookie_param || currentUser?.cookie || "",
         from: from,
         to: to,
         excludeOtherSubjects: true,
       }).then((res) => {
         console.log("@finished get attendance");
         const data = res as AttendanceType;
-        setAttendance(data);
+
+        if (data.total.held == "password" && count < 2) {
+          getCookie(currentUser.user, currentUser?.password).then((res) => {
+            if (res) {
+              currentUser.cookie = res.cookie;
+              currentUser.expire = res.expire;
+              setCurrentUser({ ...currentUser });
+              const cu = users.find((user) => user.user == currentUser.user);
+              if (cu) {
+                cu.cookie = res.cookie;
+                cu.expire = res.expire;
+                setUsers((prvUsers) => [...prvUsers, cu]);
+              }
+
+              setAttendance({
+                data: [],
+                bio: {},
+                total: {
+                  subject: "",
+                  held: "",
+                  attend: "",
+                  percent: "",
+                },
+              });
+              handleAttendance(from, to, res.cookie, count++);
+            }
+          });
+        } else {
+          setAttendance(data);
+        }
       });
 
       console.log("@get-graphs");
@@ -147,8 +187,15 @@ function ResultPage() {
       setAttendance({
         data: [],
         bio: {},
-        total: {},
+        total: {
+          subject: "",
+          held: "",
+          attend: "",
+          percent: "",
+        },
       });
+      setGraphData([]);
+      setSubjectsGraphData([]);
     };
   }, []);
 
@@ -247,13 +294,13 @@ function ResultPage() {
     handleAttendance(FormatDate(from.toString()), FormatDate(to.toString()));
   }
 
-  // if (attendance.bio.RollNo != rollno) {
-  //   return (
-  //     <div className="loading-page">
-  //       <span className="loader"></span>
-  //     </div>
-  //   );
-  // }
+  if (attendance.bio.RollNo != rollno) {
+    return (
+      <div className="loading-page">
+        <span className="loader"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="results-page">
@@ -445,7 +492,7 @@ function ResultPage() {
                 if (sortOn == "subject") {
                   return a.subject.localeCompare(b.subject);
                 } else {
-                  return b[sortOn] - a[sortOn];
+                  return +b[sortOn] - +a[sortOn];
                 }
               })
           ).map((row, i) => {

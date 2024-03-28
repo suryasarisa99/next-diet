@@ -535,8 +535,8 @@ body {
 
   .bio {
     // min-width: 40%;
-    padding: 10px 0;
     // background-color: red;
+    padding-top: 5px;
     padding-bottom: 30px;
 
     div {
@@ -675,6 +675,7 @@ body {
       display: flex;
       justify-content: center;
       align-items: center;
+      padding-top: 15px;
     }
 
     .graph-boxes {

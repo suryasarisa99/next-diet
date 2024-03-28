@@ -40,8 +40,8 @@ export type DataProps = {
 
 export type AttendanceType = {
   bio: any;
-  data: any[];
-  total: any;
+  data: SubjectAttendaceType[];
+  total: SubjectAttendaceType;
 };
 
 export type SubjectAttendaceType = {
