@@ -20,7 +20,6 @@ export default async function getAttendence({
   excludeOtherSubjects = true,
 }: getAttendenceProps) {
   let body = `rollNo=${rollNo}\r\nfromDate=${from}\r\ntoDate=${to}\r\nexcludeothersubjects=${excludeOtherSubjects}`;
-  console.log("body: ", body);
 
   return new Promise((resolve, reject) => {
     axios

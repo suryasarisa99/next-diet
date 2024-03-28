@@ -6,6 +6,7 @@ export default async function getGraph({
   cookie,
   rollNo,
   excludeOtherSubjects,
+  from = "",
 }) {
   const groupDays = 7;
   const fromMonths = 2;
@@ -24,26 +25,34 @@ export default async function getGraph({
     return date;
   }
 
-  let lastMonth = new Date();
-  lastMonth.setMonth(lastMonth.getMonth() - fromMonths);
-  lastMonth.setDate(1);
-  lastMonth.setHours(0, 0, 0, 0);
+  let prvMonth = new Date();
 
-  lastMonth = ToIstTime(lastMonth.getTime());
-  console.log(lastMonth);
-  //   lastMonth.setMinutes(lastMonth.getMinutes() - lastMonth.getTimezoneOffset());
+  if (from) {
+    prvMonth = new Date(from);
+    prvMonth.setHours(0, 0, 0, 0);
+    prvMonth = ToIstTime(prvMonth.getTime());
+  } else {
+    prvMonth.setMonth(prvMonth.getMonth() - fromMonths);
+    prvMonth.setDate(1);
+    prvMonth.setHours(0, 0, 0, 0);
+
+    prvMonth = ToIstTime(prvMonth.getTime());
+    console.log(prvMonth);
+  }
+  //   prvMonth.setMinutes(prvMonth.getMinutes() - prvMonth.getTimezoneOffset());
   const today = new Date();
 
   //* Creating a range of dates
   let dates = [];
-  let currentDate = lastMonth;
+  let currentDate = prvMonth;
 
+  console.log(prvMonth, from);
   while (currentDate < today) {
     dates.push(new Date(currentDate));
     currentDate.setDate(currentDate.getDate() + groupDays);
   }
-
   console.log("graph: requests ", dates.length);
+  console.log("graph: dates ", dates);
 
   // * Getting Attendence
   let attendencePromises = dates.map((date) => {

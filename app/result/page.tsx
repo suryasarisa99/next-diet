@@ -4,7 +4,13 @@ import { useSearchParams } from "next/navigation";
 import getAttendence from "@/actions/getAttendance";
 import getGraph from "@/actions/getGraph";
 import getCookie from "@/actions/getCookie";
-import { AttendanceType, FormatDate } from "@/context/DataContext";
+import {
+  AttendanceType,
+  FormatDate,
+  GraphDataType,
+  GraphResType,
+  SubjectsGraphType,
+} from "@/context/DataContext";
 import {
   LineChart,
   Line,
@@ -32,7 +38,16 @@ function ResultPage() {
   const to = params.get("to");
   const month = params.get("month");
   const week = params.get("week");
-  const { currentUser, attendance, setAttendance } = useData();
+  const [selectedSubject, setSelectedSubject] = useState<number>(0);
+  const {
+    currentUser,
+    attendance,
+    setAttendance,
+    setGraphData,
+    setSubjectsGraphData,
+    graphData,
+    subjectsGraphData,
+  } = useData();
   const [sortOn, setSortOn] = useState<string>("percent");
 
   const handleAttendance = useCallback(
@@ -41,7 +56,8 @@ function ResultPage() {
         console.log("returning: ", rollno, currentUser?.cookie);
         return;
       }
-      console.log("fetching data is sufficient");
+
+      console.log("@get-attendace");
 
       getAttendence({
         rollNo: rollno,
@@ -50,13 +66,79 @@ function ResultPage() {
         to: to,
         excludeOtherSubjects: true,
       }).then((res) => {
+        console.log("@finished get attendance");
         const data = res as AttendanceType;
-        console.log(data);
         setAttendance(data);
       });
+
+      console.log("@get-graphs");
+
+      let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
+        [key: string]: GraphResType;
+      };
+      const userGraph = graphs[rollno.toLowerCase()];
+      if (userGraph) {
+        setGraphData(FormatGraphData(userGraph));
+        setSubjectsGraphData(FormatSubjects(userGraph));
+
+        handleGraphData(
+          rollno,
+          currentUser?.cookie || "",
+          userGraph[userGraph.length - 1].week,
+          true
+        );
+      } else {
+        handleGraphData(rollno, currentUser?.cookie || "");
+      }
     },
     [rollno, currentUser]
   );
+
+  function handleGraphData(
+    rollno: string,
+    cookie: string,
+    from: string = "",
+    update: boolean = false
+  ) {
+    getGraph({
+      rollNo: rollno,
+      cookie: cookie,
+      excludeOtherSubjects: false,
+      from: from,
+    }).then((res) => {
+      console.log(res);
+
+      if (!update) {
+        const graphData = FormatGraphData(res as GraphResType);
+        const subjectsGraphData = FormatSubjects(res as GraphResType);
+        setGraphData(graphData);
+        setSubjectsGraphData(subjectsGraphData);
+        console.log("graph added of id: ", rollno.toLowerCase());
+        let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
+          [key: string]: GraphResType;
+        };
+        graphs[rollno.toLowerCase()] = res as GraphResType;
+        localStorage.setItem("graphs", JSON.stringify(graphs));
+      } else {
+        // update
+        console.log("graph updated of id: ", rollno.toLowerCase());
+        let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
+          [key: string]: GraphResType;
+        };
+        let userGraph = graphs[rollno.toLowerCase()];
+        userGraph = userGraph.slice(0, userGraph.length - 1);
+        userGraph = userGraph.concat(res);
+        graphs[rollno.toLowerCase()] = userGraph;
+        const graphData = FormatGraphData(userGraph as GraphResType);
+        const subjectsGraphData = FormatSubjects(userGraph as GraphResType);
+        setGraphData(graphData);
+        setSubjectsGraphData(subjectsGraphData);
+        console.log("new updated");
+        console.log(graphs);
+        localStorage.setItem("graphs", JSON.stringify(graphs));
+      }
+    });
+  }
 
   useEffect(() => {
     return () => {
@@ -116,12 +198,12 @@ function ResultPage() {
   }
 
   if (attendance.bio.RollNo != rollno) {
-    return <div>Loading...</div>;
+    return <div>Loading...{attendance.bio?.RollNo}</div>;
   }
 
   return (
     <div className="results-page">
-      {/* <div className="graph-boxes">
+      <div className="graph-boxes">
         <div className="graph">
           {graphData.length > 0 && (
             <ResponsiveContainer width={"100%"} height={350}>
@@ -162,7 +244,7 @@ function ResultPage() {
           {subjectsGraphData
             .filter((subjectGraphData) => {
               return subjectGraphData.some((subject) => {
-                return subject.held > 0;
+                return +subject.held > 0;
               });
             })
             .map((subjectGraphData, sub_index) => {
@@ -225,7 +307,7 @@ function ResultPage() {
             </ResponsiveContainer>
           )}
         </div>
-      </div> */}
+      </div>
 
       <div className="right-side">
         <div className="bio">
@@ -312,4 +394,32 @@ function ResultPage() {
       </div>
     </div>
   );
+}
+
+function FormatSubjects(data: GraphResType) {
+  let temp: any[][] = [];
+  data[0].data.forEach((item, i) => {
+    temp.push([]);
+  });
+
+  data.forEach((item, i) => {
+    item.data.forEach((subject, j) => {
+      const item = subject as any;
+      item.name = FormatDate(item.name);
+      temp[j].push(item);
+    });
+  });
+  return temp as SubjectsGraphType;
+}
+
+function FormatGraphData(data: GraphResType) {
+  return data.map((item, i) => {
+    return {
+      // name: "week " + i,
+      name: FormatDate(item.week),
+      attend: item.total.attend,
+      held: item.total.held,
+      percent: item.total.percent,
+    };
+  }) as GraphDataType;
 }

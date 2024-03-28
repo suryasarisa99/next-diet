@@ -10,8 +10,12 @@
   // --secondary-color: #ef954c;
 
   --primary-color: #82ca9d;
-  // --secondary-color: #241ae8;
-  --secondary-color: #5e59b9;
+  // --secondary-color: #8a92cb;
+  --secondary-color: #8f8bda;
+}
+
+html {
+  color-scheme: dark light;
 }
 
 @mixin mobile-sm {
@@ -124,7 +128,7 @@
       border-radius: 8px;
       font-size: 18px;
       border: 0px;
-      color: black;
+      color: rgb(0, 0, 0);
       display: flex;
       flex-shrink: 0;
       align-items: center;
@@ -162,6 +166,7 @@
     align-items: center;
     // padding-inline: 5px;
     justify-content: center;
+    color: black;
   }
   .date-input {
     display: flex;
@@ -248,7 +253,7 @@
 
   .attendance-button {
     background-color: var(--secondary-color);
-    color: black;
+    color: rgb(0, 0, 0);
     border: 0;
     padding: 6px 24px;
     border-radius: 8px;
@@ -483,8 +488,7 @@ body {
       .value {
         color: rgb(210, 210, 210);
         font-size: 20px;
-        text-transform: lowercase;
-        font-variant: small-caps;
+        text-transform: uppercase;
       }
     }
     .bio-row {

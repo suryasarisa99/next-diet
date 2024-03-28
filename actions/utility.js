@@ -1,7 +1,5 @@
 "use server";
 
-import cheerio from "cheerio";
-
 export async function parseTableAsObjects(table, $) {
   let trs = table.find("tr");
   let data = [];

@@ -13,39 +13,63 @@ export type UserDataType = {
   cookie: string;
   expire: string;
 };
-export type GraphDataType = {};
+export type GraphDataType = {
+  subject: string;
+  held: string;
+  attend: string;
+  percent: string;
+  name: string;
+}[];
+
+export type SubjectsGraphType = GraphDataType[];
+
 export type DataProps = {
   users: UserDataType[];
   setUsers: React.Dispatch<React.SetStateAction<UserDataType[]>>;
-  graph: GraphDataType[];
-  setGraph: React.Dispatch<React.SetStateAction<GraphDataType[]>>;
+  graphData: GraphDataType;
+  setGraphData: React.Dispatch<React.SetStateAction<GraphDataType>>;
   currentUser: UserDataType | null;
   setCurrentUser: React.Dispatch<React.SetStateAction<UserDataType | null>>;
-  subjectsGraphData: GraphDataType[];
-  setSubjectsGraphData: React.Dispatch<React.SetStateAction<GraphDataType[]>>;
+  subjectsGraphData: SubjectsGraphType;
+  setSubjectsGraphData: React.Dispatch<React.SetStateAction<SubjectsGraphType>>;
   rollno: string;
   setRollno: React.Dispatch<React.SetStateAction<string>>;
   attendance: AttendanceType;
   setAttendance: React.Dispatch<React.SetStateAction<AttendanceType>>;
 };
+
 export type AttendanceType = {
   bio: any;
   data: any[];
   total: any;
 };
 
+export type SubjectAttendaceType = {
+  subject: string;
+  held: string;
+  attend: string;
+  percent: string;
+};
+// data: SubjectAttendaceType[];
+// total: SubjectAttendaceType;
+// week: string;
+export type GraphResType = {
+  data: { SubjectAttendaceType: string }[];
+  total: SubjectAttendaceType;
+  week: string;
+}[];
 export const DataContext = createContext<DataProps>({} as DataProps);
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const [users, setUsers] = useState<UserDataType[]>([]);
-  const [graph, setGraph] = useState<GraphDataType[]>([]);
+  const [graphData, setGraphData] = useState<GraphDataType>([]);
   const [attendance, setAttendance] = useState<AttendanceType>({
     bio: {},
     data: [],
     total: {},
   });
   const [currentUser, setCurrentUser] = useState<UserDataType | null>(null);
-  const [subjectsGraphData, setSubjectsGraphData] = useState<GraphDataType[]>(
+  const [subjectsGraphData, setSubjectsGraphData] = useState<SubjectsGraphType>(
     []
   );
   const [rollno, setRollno] = useState("");
@@ -77,8 +101,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const value = {
     users,
     setUsers,
-    graph,
-    setGraph,
+    graphData,
+    setGraphData,
     currentUser,
     setCurrentUser,
     subjectsGraphData,
