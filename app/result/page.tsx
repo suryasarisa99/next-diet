@@ -294,13 +294,13 @@ function ResultPage() {
     handleAttendance(FormatDate(from.toString()), FormatDate(to.toString()));
   }
 
-  if (attendance.bio.RollNo != rollno) {
-    return (
-      <div className="loading-page">
-        <span className="loader"></span>
-      </div>
-    );
-  }
+  // if (attendance.bio.RollNo != rollno) {
+  //   return (
+  //     <div className="loading-page">
+  //       <span className="loader"></span>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="results-page">
