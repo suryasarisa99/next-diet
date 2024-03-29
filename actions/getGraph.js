@@ -37,7 +37,6 @@ export default async function getGraph({
     prvMonth.setHours(0, 0, 0, 0);
 
     prvMonth = ToIstTime(prvMonth.getTime());
-    console.log(prvMonth);
   }
   //   prvMonth.setMinutes(prvMonth.getMinutes() - prvMonth.getTimezoneOffset());
   const today = new Date();
@@ -46,13 +45,10 @@ export default async function getGraph({
   let dates = [];
   let currentDate = prvMonth;
 
-  console.log(prvMonth, from);
   while (currentDate < today) {
     dates.push(new Date(currentDate));
     currentDate.setDate(currentDate.getDate() + groupDays);
   }
-  console.log("graph: requests ", dates.length);
-  console.log("graph: dates ", dates);
 
   // * Getting Attendence
   let attendencePromises = dates.map((date) => {
@@ -70,7 +66,7 @@ export default async function getGraph({
   });
 
   let attendence = await Promise.all(attendencePromises).catch((err) => {
-    console.log("err: ", err);
+    console.log(err);
   });
 
   // * Maping Data

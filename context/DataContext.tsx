@@ -1,5 +1,12 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  RefObject,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+} from "react";
 
 export default function useData() {
   return useContext(DataContext);
@@ -36,6 +43,7 @@ export type DataProps = {
   setRollno: React.Dispatch<React.SetStateAction<string>>;
   attendance: AttendanceType;
   setAttendance: React.Dispatch<React.SetStateAction<AttendanceType>>;
+  cookieIsLoading: React.MutableRefObject<boolean>;
 };
 
 export type AttendanceType = {
@@ -61,7 +69,32 @@ export type GraphResType = {
 export const DataContext = createContext<DataProps>({} as DataProps);
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
-  const [users, setUsers] = useState<UserDataType[]>([]);
+  // const [users, setUsers] = useState<UserDataType[]>([]);
+  // const [currentUser, setCurrentUser] = useState<UserDataType | null>(null);
+  // const [rollno, setRollno] = useState("");
+  const [users, setUsers] = useState<UserDataType[]>(() => {
+    const users_local = JSON.parse(
+      localStorage.getItem("users") || "[]"
+    ) as UserDataType[];
+    return users_local;
+  });
+
+  const [currentUser, setCurrentUser] = useState<UserDataType | null>(() => {
+    const users_local = JSON.parse(
+      localStorage.getItem("users") || "[]"
+    ) as UserDataType[];
+    const userId = localStorage.getItem("currentUser");
+    if (userId) {
+      const user = users_local.find((u) => u.user === userId);
+      return user ? user : null;
+    }
+    return null;
+  });
+
+  const [rollno, setRollno] = useState<string>(() => {
+    const userId = localStorage.getItem("currentUser");
+    return userId ? userId : "";
+  });
   const [graphData, setGraphData] = useState<GraphDataType>([]);
   const [attendance, setAttendance] = useState<AttendanceType>({
     bio: {},
@@ -73,11 +106,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       percent: "",
     },
   });
-  const [currentUser, setCurrentUser] = useState<UserDataType | null>(null);
   const [subjectsGraphData, setSubjectsGraphData] = useState<SubjectsGraphType>(
     []
   );
-  const [rollno, setRollno] = useState("");
+  const cookieIsLoading = useRef<boolean>(false);
 
   useEffect(() => {
     if (users.length > 0) localStorage.setItem("users", JSON.stringify(users));
@@ -85,23 +117,23 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   }, [users, currentUser]);
 
   //   get data from local storage
-  useEffect(() => {
-    const users_local = JSON.parse(
-      localStorage.getItem("users") || "[]"
-    ) as UserDataType[];
+  // useEffect(() => {
+  //   const users_local = JSON.parse(
+  //     localStorage.getItem("users") || "[]"
+  //   ) as UserDataType[];
 
-    if (users_local.length > 0) {
-      setUsers(users_local);
-      const userId = localStorage.getItem("currentUser");
-      if (userId) {
-        const user = users_local.find((u) => u.user === userId);
-        if (user) {
-          setCurrentUser(user);
-          setRollno(userId);
-        }
-      }
-    }
-  }, []);
+  //   if (users_local.length > 0) {
+  //     setUsers(users_local);
+  //     const userId = localStorage.getItem("currentUser");
+  //     if (userId) {
+  //       const user = users_local.find((u) => u.user === userId);
+  //       if (user) {
+  //         setCurrentUser(user);
+  //         setRollno(userId);
+  //       }
+  //     }
+  //   }
+  // }, []);
 
   const value = {
     users,
@@ -116,6 +148,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setRollno,
     attendance,
     setAttendance,
+    cookieIsLoading,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

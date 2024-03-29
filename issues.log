@@ -1,7 +1,4 @@
 
-1. update cookie expire,
-2. loading spinner for starting and result page and graphs
-//3. little amount space in result page
+1. update cookie expire, check date
 4. show the current type of result in result page
-//5. add functions for week and before week
 6. prefetch pages

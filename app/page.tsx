@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import useData from "@/context/DataContext";
 import { FormatDate } from "@/context/DataContext";
+import getCookie from "@/actions/getCookie";
 
 import Skeleton from "react-loading-skeleton";
 export default function Home() {
@@ -20,7 +21,15 @@ export default function Home() {
   const inputTo = useRef<HTMLInputElement>(null);
   const weekLastItem = useRef<HTMLDivElement>(null);
   const lastMonth = useRef(null);
-  const { rollno, setRollno, currentUser } = useData();
+  const {
+    rollno,
+    setRollno,
+    currentUser,
+    users,
+    setUsers,
+    setCurrentUser,
+    cookieIsLoading,
+  } = useData();
   const monthRef = useRef<HTMLInputElement>(null);
   const week = [
     { name: "b Weeek", to: `/result?rollno=${rollno}&week=bweek` },
@@ -33,8 +42,38 @@ export default function Home() {
     if (!currentUser) router.replace("/login");
     // scroll to last element
     if (!weekLastItem.current) return;
+
+    if (currentUser?.user) {
+      const expireDate =
+        new Date(currentUser.expire).getTime() + 1000 * 60 * 60 * 4;
+
+      if (expireDate < Date.now()) {
+        console.log("expired");
+        cookieIsLoading.current = true;
+        getCookie(currentUser.user, currentUser?.password).then((res) => {
+          if (res) {
+            currentUser.cookie = res.cookie;
+            currentUser.expire = res.expire;
+            setCurrentUser({ ...currentUser });
+            const cu = users.find((user) => user.user == currentUser.user);
+            if (cu) {
+              cu.cookie = res.cookie;
+              cu.expire = res.expire;
+              setUsers((prvUsers) => [...prvUsers, cu]);
+            }
+            cookieIsLoading.current = true;
+          }
+        });
+      } else {
+        console.log(
+          "valid for: ",
+          ((expireDate - Date.now()) / (1000 * 60 * 60)).toFixed(2),
+          " hrs"
+        );
+      }
+    }
     weekLastItem.current.scrollIntoView({ block: "end" });
-  }, [currentUser]);
+  }, [currentUser, users]);
 
   function handleAttendance() {
     const from = FormatDate(date.from);
@@ -46,6 +85,13 @@ export default function Home() {
     const month = FormatDate(e.target.value);
     router.push(`/result/?rollno=${rollno}&month=${month}`);
   }
+
+  if (!currentUser)
+    return (
+      <div className="loading-page">
+        <span className="loader"></span>
+      </div>
+    );
 
   return (
     <div className="home-page">

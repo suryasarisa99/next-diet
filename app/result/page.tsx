@@ -5,6 +5,7 @@ import getAttendence from "@/actions/getAttendance";
 import getGraph from "@/actions/getGraph";
 import getCookie from "@/actions/getCookie";
 import Skeleton from "react-loading-skeleton";
+import { useRouter } from "next/navigation";
 import {
   AttendanceType,
   FormatDate,
@@ -41,6 +42,7 @@ function ResultPage() {
   const week = params.get("week");
   const subjectGraphRef = useRef<HTMLDivElement>(null);
   const [selectedSubject, setSelectedSubject] = useState<number>(0);
+  const router = useRouter();
   const {
     currentUser,
     attendance,
@@ -52,6 +54,7 @@ function ResultPage() {
     graphData,
     subjectsGraphData,
     setCurrentUser,
+    cookieIsLoading,
   } = useData();
 
   type SortONType = "subject" | "held" | "attend" | "percent";
@@ -65,7 +68,7 @@ function ResultPage() {
       cookie_param: string | null = "",
       count: number = 0
     ) => {
-      if (!rollno || !currentUser?.cookie) {
+      if (!rollno || !currentUser?.cookie || cookieIsLoading.current) {
         console.log("returning: ", rollno, currentUser?.cookie);
         return;
       }
@@ -82,7 +85,8 @@ function ResultPage() {
         console.log("@finished get attendance");
         const data = res as AttendanceType;
 
-        if (data.total.held == "password" && count < 2) {
+        if (data.total.held == "Password" && count < 2) {
+          console.log("cookie expired, got held = Password, count: ", count);
           getCookie(currentUser.user, currentUser?.password).then((res) => {
             if (res) {
               currentUser.cookie = res.cookie;
@@ -133,7 +137,7 @@ function ResultPage() {
         handleGraphData(rollno, currentUser?.cookie || "");
       }
     },
-    [rollno, currentUser]
+    [rollno]
   );
 
   function handleGraphData(
@@ -183,6 +187,7 @@ function ResultPage() {
   }
 
   useEffect(() => {
+    if (!currentUser?.cookie) router.replace("/login");
     return () => {
       setAttendance({
         data: [],
@@ -228,7 +233,7 @@ function ResultPage() {
       }
     }
     fetchData();
-  }, [handleAttendance, month, from, to, week]);
+  }, []);
 
   function getTodayAttendace() {
     let date = new Date();
@@ -322,13 +327,13 @@ function ResultPage() {
                   strokeWidth={2}
                 />
                 <CartesianGrid stroke="#4d4d4d9c" />
-                <XAxis dataKey="name" />
+                {/* <XAxis dataKey="name" /> */}
 
-                <YAxis
+                {/* <YAxis
                   allowDataOverflow={false}
                   allowDecimals={true}
                   domain={[0, 60]}
-                />
+                /> */}
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#2a2a2a",
@@ -406,13 +411,13 @@ function ResultPage() {
                   strokeWidth={2}
                 />
                 <CartesianGrid stroke="#6a6a6a77" />
-                <XAxis dataKey="name" />
+                {/* <XAxis dataKey="name" /> */}
 
-                <YAxis
+                {/* <YAxis
                   allowDataOverflow={false}
                   allowDecimals={true}
                   domain={[0, 8]}
-                />
+                /> */}
                 <Tooltip
                   key={
                     subjectsGraphData[selectedSubject][0].subject + "tooltip"
