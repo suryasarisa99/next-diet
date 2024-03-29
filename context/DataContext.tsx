@@ -73,27 +73,34 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // const [currentUser, setCurrentUser] = useState<UserDataType | null>(null);
   // const [rollno, setRollno] = useState("");
   const [users, setUsers] = useState<UserDataType[]>(() => {
-    const users_local = JSON.parse(
-      localStorage.getItem("users") || "[]"
-    ) as UserDataType[];
-    return users_local;
+    if (typeof window !== "undefined") {
+      const users_local = JSON.parse(
+        localStorage.getItem("users") || "[]"
+      ) as UserDataType[];
+      return users_local;
+    }
+    return [];
   });
 
   const [currentUser, setCurrentUser] = useState<UserDataType | null>(() => {
-    const users_local = JSON.parse(
-      localStorage.getItem("users") || "[]"
-    ) as UserDataType[];
-    const userId = localStorage.getItem("currentUser");
-    if (userId) {
-      const user = users_local.find((u) => u.user === userId);
-      return user ? user : null;
+    if (typeof window !== "undefined") {
+      const users_local = JSON.parse(
+        localStorage.getItem("users") || "[]"
+      ) as UserDataType[];
+      const userId = localStorage.getItem("currentUser");
+      if (userId) {
+        const user = users_local.find((u) => u.user === userId);
+        return user ? user : null;
+      }
     }
     return null;
   });
 
   const [rollno, setRollno] = useState<string>(() => {
-    const userId = localStorage.getItem("currentUser");
-    return userId ? userId : "";
+    if (typeof window !== "undefined") {
+      const userId = localStorage.getItem("currentUser");
+      return userId ? userId : "";
+    } else return "";
   });
   const [graphData, setGraphData] = useState<GraphDataType>([]);
   const [attendance, setAttendance] = useState<AttendanceType>({
