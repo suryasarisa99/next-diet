@@ -142,39 +142,43 @@ function ResultPage() {
       cookie: cookie,
       excludeOtherSubjects: false,
       from: from,
-    }).then((res) => {
-      console.log(res);
+    })
+      .then((res) => {
+        console.log(res);
 
-      if (!update) {
-        const graphData = FormatGraphData(res as GraphResType);
-        const subjectsGraphData = FormatSubjects(res as GraphResType);
-        setGraphData(graphData);
-        setSubjectsGraphData(subjectsGraphData);
-        console.log("graph added of id: ", rollno.toLowerCase());
-        let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
-          [key: string]: GraphResType;
-        };
-        graphs[rollno.toLowerCase()] = res as GraphResType;
-        localStorage.setItem("graphs", JSON.stringify(graphs));
-      } else {
-        // update
-        console.log("graph updated of id: ", rollno.toLowerCase());
-        let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
-          [key: string]: GraphResType;
-        };
-        let userGraph = graphs[rollno.toLowerCase()];
-        userGraph = userGraph.slice(0, userGraph.length - 1);
-        userGraph = userGraph.concat(res);
-        graphs[rollno.toLowerCase()] = userGraph;
-        const graphData = FormatGraphData(userGraph as GraphResType);
-        const subjectsGraphData = FormatSubjects(userGraph as GraphResType);
-        setGraphData(graphData);
-        setSubjectsGraphData(subjectsGraphData);
-        console.log("new updated");
-        console.log(graphs);
-        localStorage.setItem("graphs", JSON.stringify(graphs));
-      }
-    });
+        if (!update) {
+          const graphData = FormatGraphData(res as GraphResType);
+          const subjectsGraphData = FormatSubjects(res as GraphResType);
+          setGraphData(graphData);
+          setSubjectsGraphData(subjectsGraphData);
+          console.log("graph added of id: ", rollno.toLowerCase());
+          let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
+            [key: string]: GraphResType;
+          };
+          graphs[rollno.toLowerCase()] = res as GraphResType;
+          localStorage.setItem("graphs", JSON.stringify(graphs));
+        } else {
+          // update
+          console.log("graph updated of id: ", rollno.toLowerCase());
+          let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
+            [key: string]: GraphResType;
+          };
+          let userGraph = graphs[rollno.toLowerCase()];
+          userGraph = userGraph.slice(0, userGraph.length - 1);
+          userGraph = userGraph.concat(res);
+          graphs[rollno.toLowerCase()] = userGraph;
+          const graphData = FormatGraphData(userGraph as GraphResType);
+          const subjectsGraphData = FormatSubjects(userGraph as GraphResType);
+          setGraphData(graphData);
+          setSubjectsGraphData(subjectsGraphData);
+          console.log("new updated");
+          console.log(graphs);
+          localStorage.setItem("graphs", JSON.stringify(graphs));
+        }
+      })
+      .catch((e) => {
+        alert("Error: " + e.message);
+      });
   }
 
   useEffect(() => {
