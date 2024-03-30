@@ -32,6 +32,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!currentUser) router.replace("/login");
+    router.prefetch("/result");
     if (!weekLastItem.current) return;
 
     weekLastItem.current.scrollIntoView({ block: "end" });

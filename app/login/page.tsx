@@ -31,6 +31,7 @@ export default function Login() {
       return;
     }
     setLoading(true);
+    router.prefetch("/");
 
     getCookie(user, password)
       .then((res) => {
