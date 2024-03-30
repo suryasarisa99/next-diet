@@ -110,23 +110,23 @@ function ResultPage() {
 
       // console.log("@get-graphs");
 
-      // let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
-      //   [key: string]: GraphResType;
-      // };
-      // const userGraph = graphs[rollno.toLowerCase()];
-      // if (userGraph) {
-      //   setGraphData(FormatGraphData(userGraph));
-      //   setSubjectsGraphData(FormatSubjects(userGraph));
+      let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
+        [key: string]: GraphResType;
+      };
+      const userGraph = graphs[rollno.toLowerCase()];
+      if (userGraph) {
+        setGraphData(FormatGraphData(userGraph));
+        setSubjectsGraphData(FormatSubjects(userGraph));
 
-      //   handleGraphData(
-      //     rollno,
-      //     currentUser?.cookie || "",
-      //     userGraph[userGraph.length - 1].week,
-      //     true
-      //   );
-      // } else {
-      //   handleGraphData(rollno, currentUser?.cookie || "");
-      // }
+        handleGraphData(
+          rollno,
+          currentUser?.cookie || "",
+          userGraph[userGraph.length - 1].week,
+          true
+        );
+      } else {
+        handleGraphData(rollno, currentUser?.cookie || "");
+      }
     },
     [rollno, currentUser]
   );
