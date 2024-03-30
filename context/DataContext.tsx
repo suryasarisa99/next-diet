@@ -106,6 +106,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           currentUser.cookie = res.cookie;
           currentUser.expire = res.expire;
           setCurrentUser({ ...currentUser });
+
           cookieIsLoading.current = false;
         }
       });
