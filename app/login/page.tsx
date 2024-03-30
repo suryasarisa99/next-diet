@@ -40,7 +40,6 @@ export default function Login() {
           expire: string;
           role: string;
         };
-
         if (res) {
           setError(false);
           console.log(res);
