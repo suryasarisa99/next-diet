@@ -6,13 +6,15 @@ import getGraph from "@/actions/getGraph";
 import getCookie from "@/actions/getCookie";
 import Skeleton from "react-loading-skeleton";
 import { useRouter } from "next/navigation";
+import { FormatDate } from "@/context/DataContext";
+
 import {
   AttendanceType,
-  FormatDate,
   GraphDataType,
   GraphResType,
   SubjectsGraphType,
-} from "@/context/DataContext";
+} from "@/context/DataContextProps";
+
 import {
   LineChart,
   Line,
@@ -55,6 +57,7 @@ function ResultPage() {
     subjectsGraphData,
     setCurrentUser,
     cookieIsLoading,
+    validateCookie,
   } = useData();
 
   type SortONType = "subject" | "held" | "attend" | "percent";
@@ -65,16 +68,21 @@ function ResultPage() {
     (
       from: string | null = "",
       to: string | null = "",
-      cookie_param: string | null = "",
-      count: number = 0
+      cookie_param: string | null = ""
     ) => {
+      if (cookieIsLoading.current) {
+        console.warn("returning 1: May be Cookie Is Loading");
+        return;
+      }
+
+      validateCookie();
+
       if (!rollno || !currentUser?.cookie || cookieIsLoading.current) {
-        console.log("returning: ", rollno, currentUser?.cookie);
+        console.warn("returning 2: May Be Cookie is Loading");
         return;
       }
 
       console.log("@get-attendace");
-
       getAttendence({
         rollNo: rollno,
         cookie: cookie_param || currentUser?.cookie || "",
@@ -85,31 +93,14 @@ function ResultPage() {
         console.log("@finished get attendance");
         const data = res as AttendanceType;
 
-        if (data.total.held == "Password" && count < 2) {
-          console.log("cookie expired, got held = Password, count: ", count);
+        if (data.total.held == "Password") {
+          console.warn("refecthing: cookie expired, got held = Password");
           getCookie(currentUser.user, currentUser?.password).then((res) => {
             if (res) {
               currentUser.cookie = res.cookie;
               currentUser.expire = res.expire;
               setCurrentUser({ ...currentUser });
-              const cu = users.find((user) => user.user == currentUser.user);
-              if (cu) {
-                cu.cookie = res.cookie;
-                cu.expire = res.expire;
-                setUsers((prvUsers) => [...prvUsers, cu]);
-              }
-
-              setAttendance({
-                data: [],
-                bio: {},
-                total: {
-                  subject: "",
-                  held: "",
-                  attend: "",
-                  percent: "",
-                },
-              });
-              handleAttendance(from, to, res.cookie, count++);
+              return;
             }
           });
         } else {
@@ -117,27 +108,27 @@ function ResultPage() {
         }
       });
 
-      console.log("@get-graphs");
+      // console.log("@get-graphs");
 
-      let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
-        [key: string]: GraphResType;
-      };
-      const userGraph = graphs[rollno.toLowerCase()];
-      if (userGraph) {
-        setGraphData(FormatGraphData(userGraph));
-        setSubjectsGraphData(FormatSubjects(userGraph));
+      // let graphs = JSON.parse(localStorage.getItem("graphs") || "{}") as {
+      //   [key: string]: GraphResType;
+      // };
+      // const userGraph = graphs[rollno.toLowerCase()];
+      // if (userGraph) {
+      //   setGraphData(FormatGraphData(userGraph));
+      //   setSubjectsGraphData(FormatSubjects(userGraph));
 
-        handleGraphData(
-          rollno,
-          currentUser?.cookie || "",
-          userGraph[userGraph.length - 1].week,
-          true
-        );
-      } else {
-        handleGraphData(rollno, currentUser?.cookie || "");
-      }
+      //   handleGraphData(
+      //     rollno,
+      //     currentUser?.cookie || "",
+      //     userGraph[userGraph.length - 1].week,
+      //     true
+      //   );
+      // } else {
+      //   handleGraphData(rollno, currentUser?.cookie || "");
+      // }
     },
-    [rollno]
+    [rollno, currentUser]
   );
 
   function handleGraphData(
@@ -202,9 +193,11 @@ function ResultPage() {
       setGraphData([]);
       setSubjectsGraphData([]);
     };
-  }, []);
+  }, [currentUser]);
 
   useEffect(() => {
+    console.log(" <> === Result UsEffect ===  <>");
+
     function fetchData() {
       if (month) {
         console.log("month: ", month);
@@ -233,7 +226,7 @@ function ResultPage() {
       }
     }
     fetchData();
-  }, []);
+  }, [currentUser]);
 
   function getTodayAttendace() {
     let date = new Date();
@@ -376,7 +369,7 @@ function ResultPage() {
                     </p>
                   );
                 })
-            : Array(5)
+            : Array(9)
                 .fill(0)
                 .map((_, i) => {
                   return (

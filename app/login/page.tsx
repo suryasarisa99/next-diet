@@ -4,7 +4,8 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import getCookie from "@/actions/getCookie";
 import { useRouter } from "next/navigation";
-import useData, { UserDataType } from "@/context/DataContext";
+import useData from "@/context/DataContext";
+import { UserDataType } from "@/context/DataContextProps";
 
 export default function Login() {
   const router = useRouter();
