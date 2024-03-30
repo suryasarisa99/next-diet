@@ -7,65 +7,22 @@ import {
   useState,
   useRef,
 } from "react";
+import {
+  DataProps,
+  AttendanceType,
+  GraphDataType,
+  GraphResType,
+  UserDataType,
+  SubjectAttendaceType,
+  SubjectsGraphType,
+} from "./DataContextProps";
+
+import getCookie from "@/actions/getCookie";
 
 export default function useData() {
   return useContext(DataContext);
 }
 
-// @types
-export type UserDataType = {
-  user: string;
-  password: string;
-  role: string;
-  cookie: string;
-  expire: string;
-};
-export type GraphDataType = {
-  subject: string;
-  held: string;
-  attend: string;
-  percent: string;
-  name: string;
-}[];
-
-export type SubjectsGraphType = GraphDataType[];
-
-export type DataProps = {
-  users: UserDataType[];
-  setUsers: React.Dispatch<React.SetStateAction<UserDataType[]>>;
-  graphData: GraphDataType;
-  setGraphData: React.Dispatch<React.SetStateAction<GraphDataType>>;
-  currentUser: UserDataType | null;
-  setCurrentUser: React.Dispatch<React.SetStateAction<UserDataType | null>>;
-  subjectsGraphData: SubjectsGraphType;
-  setSubjectsGraphData: React.Dispatch<React.SetStateAction<SubjectsGraphType>>;
-  rollno: string;
-  setRollno: React.Dispatch<React.SetStateAction<string>>;
-  attendance: AttendanceType;
-  setAttendance: React.Dispatch<React.SetStateAction<AttendanceType>>;
-  cookieIsLoading: React.MutableRefObject<boolean>;
-};
-
-export type AttendanceType = {
-  bio: any;
-  data: SubjectAttendaceType[];
-  total: SubjectAttendaceType;
-};
-
-export type SubjectAttendaceType = {
-  subject: string;
-  held: string;
-  attend: string;
-  percent: string;
-};
-// data: SubjectAttendaceType[];
-// total: SubjectAttendaceType;
-// week: string;
-export type GraphResType = {
-  data: { SubjectAttendaceType: string }[];
-  total: SubjectAttendaceType;
-  week: string;
-}[];
 export const DataContext = createContext<DataProps>({} as DataProps);
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
@@ -120,27 +77,46 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (users.length > 0) localStorage.setItem("users", JSON.stringify(users));
-    if (currentUser) localStorage.setItem("currentUser", currentUser.user);
-  }, [users, currentUser]);
+  }, [users]);
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem("currentUser", currentUser.user);
+      setUsers((prvUsers) => {
+        return prvUsers.map((user) => {
+          if (user.user == currentUser.user) {
+            user = currentUser;
+          }
+          return user;
+        });
+      });
+    }
+  }, [currentUser]);
 
-  //   get data from local storage
-  // useEffect(() => {
-  //   const users_local = JSON.parse(
-  //     localStorage.getItem("users") || "[]"
-  //   ) as UserDataType[];
+  function validateCookie() {
+    if (!currentUser) return;
+    const expireDate =
+      new Date(currentUser.expire).getTime() + 1000 * 60 * 60 * 4;
 
-  //   if (users_local.length > 0) {
-  //     setUsers(users_local);
-  //     const userId = localStorage.getItem("currentUser");
-  //     if (userId) {
-  //       const user = users_local.find((u) => u.user === userId);
-  //       if (user) {
-  //         setCurrentUser(user);
-  //         setRollno(userId);
-  //       }
-  //     }
-  //   }
-  // }, []);
+    if (expireDate < Date.now()) {
+      console.warn("expired, ", currentUser?.expire);
+      cookieIsLoading.current = true;
+      getCookie(currentUser.user, currentUser?.password).then((res) => {
+        if (res) {
+          console.log("new Cookie Created");
+          currentUser.cookie = res.cookie;
+          currentUser.expire = res.expire;
+          setCurrentUser({ ...currentUser });
+          cookieIsLoading.current = false;
+        }
+      });
+    } else {
+      console.log(
+        "valid for: ",
+        ((expireDate - Date.now()) / (1000 * 60 * 60)).toFixed(2),
+        " hrs"
+      );
+    }
+  }
 
   const value = {
     users,
@@ -156,6 +132,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     attendance,
     setAttendance,
     cookieIsLoading,
+    validateCookie,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

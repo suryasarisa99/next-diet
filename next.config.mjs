@@ -6,7 +6,9 @@ const withPWA = pwa({
   dest: "public",
   reloadOnOnline: false,
 });
-const nextConfig = {};
+const nextConfig = {
+  reactStrictMode: false,
+};
 
 // export default withPWA(nextConfig);
 export default nextConfig;

@@ -1,4 +1,4 @@
 
-1. update cookie expire, check date
+1. for graphs, check the held==="Password" for cookie expire.
 4. show the current type of result in result page
 6. prefetch pages
