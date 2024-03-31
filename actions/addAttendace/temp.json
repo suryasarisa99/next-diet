@@ -1,0 +1,547 @@
+{
+  "subjects": [
+    { "name": "DLD", "id": "1600", "subjectType": "T" },
+    { "name": "ML Lab", "id": "1601", "subjectType": "L" },
+    { "name": "ML Lab", "id": "1601", "subjectType": "L" },
+    { "name": "ML Lab", "id": "1601", "subjectType": "L" },
+    { "name": "DLD", "id": "1600", "subjectType": "T" },
+    { "name": "CD", "id": "1597", "subjectType": "T" },
+    { "name": "ML", "id": "1596", "subjectType": "T" }
+  ],
+  "data": [
+    {
+      "batch": "1",
+      "index": 1,
+      "id": "121711",
+      "rollNo": "21U41A0502",
+      "name": "alla vyjayanthi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 2,
+      "id": "121551",
+      "rollNo": "21U41A0504",
+      "name": "bongu yashodha",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 3,
+      "id": "121647",
+      "rollNo": "21U41A0509",
+      "name": "doddi tejaswani",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 4,
+      "id": "121540",
+      "rollNo": "21U41A0510",
+      "name": "ella kumar swamy",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 5,
+      "id": "121900",
+      "rollNo": "21U41A0511",
+      "name": "gandi bhanu prakash sai",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 6,
+      "id": "121843",
+      "rollNo": "21U41A0512",
+      "name": "ganireddy sai mohitha",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 7,
+      "id": "121601",
+      "rollNo": "21U41A0514",
+      "name": "jayadhar pavan kalyan gedda",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 8,
+      "id": "121571",
+      "rollNo": "21U41A0515",
+      "name": "kandregula mounika jyothi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 9,
+      "id": "121494",
+      "rollNo": "21U41A0516",
+      "name": "kandregula nikhita",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 10,
+      "id": "121881",
+      "rollNo": "21U41A0518",
+      "name": "karanam bhagya lakshmi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 11,
+      "id": "121681",
+      "rollNo": "21U41A0519",
+      "name": "karri jyothi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 12,
+      "id": "121548",
+      "rollNo": "21U41A0522",
+      "name": "kommanapalli subhash",
+      "result": [true, true, true, true, true, true, true]
+    },
+    {
+      "batch": "1",
+      "index": 13,
+      "id": "121863",
+      "rollNo": "21U41A0523",
+      "name": "kona anand",
+      "result": [false, true, true, true, true, true, true]
+    },
+    {
+      "batch": "1",
+      "index": 14,
+      "id": "121827",
+      "rollNo": "21U41A0524",
+      "name": "koppoju tarun kumar",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 15,
+      "id": "121428",
+      "rollNo": "21U41A0528",
+      "name": "maddala praneetha",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 16,
+      "id": "12221",
+      "rollNo": "21U41A0529",
+      "name": "sirasapalli renuka",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 17,
+      "id": "12218",
+      "rollNo": "21U41A0530",
+      "name": "karri sri chaithanya",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 18,
+      "id": "121835",
+      "rollNo": "21U41A0532",
+      "name": "matcha jahnavi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 19,
+      "id": "121715",
+      "rollNo": "21U41A0533",
+      "name": "moturu vijaya",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 20,
+      "id": "121822",
+      "rollNo": "21U41A0535",
+      "name": "narava chaitanya pavani",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 21,
+      "id": "121832",
+      "rollNo": "21U41A0538",
+      "name": "patchikora sri kavya",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 22,
+      "id": "1032",
+      "rollNo": "21U41A0540",
+      "name": "peela lakshmi vinaya srija",
+      "result": [true, true, true, true, true, true, true]
+    },
+    {
+      "batch": "1",
+      "index": 23,
+      "id": "121845",
+      "rollNo": "21U41A0541",
+      "name": "pilla yasaswini",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 24,
+      "id": "121424",
+      "rollNo": "21U41A0542",
+      "name": "ponnada aditya",
+      "result": [true, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 25,
+      "id": "121883",
+      "rollNo": "21U41A0543",
+      "name": "punyamantula mounika",
+      "result": [true, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 26,
+      "id": "121664",
+      "rollNo": "21U41A0544",
+      "name": "raghupatruni hemanjalee",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 27,
+      "id": "121934",
+      "rollNo": "21U41A0545",
+      "name": "rongali indhira",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 28,
+      "id": "121646",
+      "rollNo": "21U41A0547",
+      "name": "singampalli likhitha",
+      "result": [true, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 29,
+      "id": "121498",
+      "rollNo": "21U41A0548",
+      "name": "sirisala hemalatha",
+      "result": [true, false, false, false, true, true, false]
+    },
+    {
+      "batch": "1",
+      "index": 30,
+      "id": "121861",
+      "rollNo": "21U41A0550",
+      "name": "vegi bhavya sri lakshmi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 31,
+      "id": "121853",
+      "rollNo": "21U41A0551",
+      "name": "velaga dinesh",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 32,
+      "id": "121499",
+      "rollNo": "21U41A0553",
+      "name": "yandrapu jaya sree",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 33,
+      "id": "121592",
+      "rollNo": "21U41A0559",
+      "name": "bandaru haritha",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 34,
+      "id": "121656",
+      "rollNo": "21U41A0562",
+      "name": "buddha mokshitha lakshmi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 35,
+      "id": "121674",
+      "rollNo": "21U41A0563",
+      "name": "chandana sravani",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 36,
+      "id": "121620",
+      "rollNo": "21U41A0564",
+      "name": "chinni jayakrishna",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 37,
+      "id": "121663",
+      "rollNo": "21U41A0566",
+      "name": "devarakonda radha ashritha kumari",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 38,
+      "id": "12219",
+      "rollNo": "21U41A0572",
+      "name": "nagulapalli kusuma",
+      "result": [true, true, true, true, true, true, false]
+    },
+    {
+      "batch": "1",
+      "index": 39,
+      "id": "1042",
+      "rollNo": "21U41A0574",
+      "name": "killari sai nithin",
+      "result": [true, true, true, true, true, true, false]
+    },
+    {
+      "batch": "1",
+      "index": 40,
+      "id": "121716",
+      "rollNo": "21U41A0575",
+      "name": "kommu anusha",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 41,
+      "id": "121521",
+      "rollNo": "21U41A0578",
+      "name": "kota aparna devi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 42,
+      "id": "121457",
+      "rollNo": "21U41A0582",
+      "name": "malla thanuja",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 43,
+      "id": "121844",
+      "rollNo": "21U41A0589",
+      "name": "pedapati vijay kumar",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 44,
+      "id": "121636",
+      "rollNo": "21U41A0590",
+      "name": "pedireddy durga venkata manikyamambasruthi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 45,
+      "id": "121566",
+      "rollNo": "21U41A0594",
+      "name": "pindi chandana",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 46,
+      "id": "121965",
+      "rollNo": "21U41A0595",
+      "name": "pinnamaraju siva maheswari",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 47,
+      "id": "121906",
+      "rollNo": "21U41A0597",
+      "name": "pola harshitha",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 48,
+      "id": "121589",
+      "rollNo": "21U41A05A6",
+      "name": "vaddadhi devi chandini",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 49,
+      "id": "121598",
+      "rollNo": "21U41A05B7",
+      "name": "boyapati anju pavani",
+      "result": [true, true, true, true, true, true, true]
+    },
+    {
+      "batch": "1",
+      "index": 50,
+      "id": "121484",
+      "rollNo": "21U41A05B8",
+      "name": "chakka srivalli",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 51,
+      "id": "121595",
+      "rollNo": "21U41A05B9",
+      "name": "chenna laxmi gayatri",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 52,
+      "id": "121854",
+      "rollNo": "21U41A05C5",
+      "name": "gollavilli kartik",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 53,
+      "id": "121497",
+      "rollNo": "21U41A05D2",
+      "name": "kavuru pushpanjali",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 54,
+      "id": "121629",
+      "rollNo": "21U41A05D3",
+      "name": "koppisetty uma devi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 55,
+      "id": "121569",
+      "rollNo": "21U41A05D6",
+      "name": "kothapalli ashok",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 56,
+      "id": "121514",
+      "rollNo": "21U41A05D9",
+      "name": "mandapati sai durga sujana",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 57,
+      "id": "121628",
+      "rollNo": "21U41A05E4",
+      "name": "neelam deepthi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 58,
+      "id": "121609",
+      "rollNo": "21U41A05E8",
+      "name": "rajabhaktula likhita",
+      "result": [true, true, true, true, true, true, true]
+    },
+    {
+      "batch": "1",
+      "index": 59,
+      "id": "1227",
+      "rollNo": "21U41A05F9",
+      "name": "badireddy devi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 60,
+      "id": "122455",
+      "rollNo": "22U45A0501",
+      "name": "dosuru sravanthi",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 61,
+      "id": "122406",
+      "rollNo": "22U45A0502",
+      "name": "gondesi anjali",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 62,
+      "id": "122384",
+      "rollNo": "22U45A0507",
+      "name": "mutta hema sagar",
+      "result": [false, false, false, false, true, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 63,
+      "id": "12251",
+      "rollNo": "22U45A0508",
+      "name": "mylman karthik",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 64,
+      "id": "122431",
+      "rollNo": "22U45A0511",
+      "name": "polimera yashwanth narayana",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 65,
+      "id": "122446",
+      "rollNo": "22U45A0512",
+      "name": "thokada susmitha",
+      "result": [false, false, false, false, false, false, false]
+    },
+    {
+      "batch": "1",
+      "index": 66,
+      "id": "122400",
+      "rollNo": "22U45A0513",
+      "name": "villuri sasi vardhan",
+      "result": [false, false, false, false, false, false, false]
+    }
+  ],
+  "doa": "13-Feb-2024",
+  "tableName": "tblBTech_4_5_1",
+  "semesterId": 5,
+  "section": 1,
+  "courseId": 1,
+  "branchId": 4
+}
