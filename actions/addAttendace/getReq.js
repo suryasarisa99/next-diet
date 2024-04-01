@@ -4,11 +4,11 @@ import { format } from "./format";
 import { parseTableAsObjects } from "./format";
 export default async function getAttendenceReport(
   {
-    semester = 6,
-    section = 1,
+    semester = "6",
+    section = "1",
     date = "08/01/2024",
-    courseId = 1,
-    branchId = 4,
+    courseId = "1",
+    branchId = "4",
   },
   cookie
 ) {

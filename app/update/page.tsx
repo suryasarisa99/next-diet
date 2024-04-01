@@ -54,12 +54,12 @@ function UpdatePage() {
   const [subjects, setSubjects] = useState<SubjectAttendaceType[]>([]);
   const params = useSearchParams();
 
-  const section = parseInt(params.get("section") || "2");
-  const branchId = parseInt(params.get("branch") || "4");
-  const semester = parseInt(params.get("semester") || "6");
-  const courseId = parseInt(params.get("courseId") || "1");
-  const date = params.get("date") || "01/02/2024";
-  const batch = params.get("startYear") || "2021";
+  const section = params.get("section");
+  const branchId = params.get("branch");
+  const semester = params.get("semester");
+  const courseId = params.get("courseId");
+  const date = params.get("date");
+  const batch = params.get("startYear");
   const cookieRef = useRef("");
 
   const [totalData, setTotalData] = useState<AttendaceReportType>({
@@ -102,11 +102,11 @@ function UpdatePage() {
   function request(cookie: string) {
     getAttendaceReq(
       {
-        date,
-        section,
-        courseId,
-        semester,
-        branchId,
+        date: date || "1/02/2024",
+        section: section || "",
+        courseId: courseId || "",
+        semester: semester || "",
+        branchId: branchId || "",
       },
       cookie
     )

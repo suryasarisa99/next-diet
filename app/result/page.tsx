@@ -1,11 +1,10 @@
 "use client";
 import { useState, useEffect, useCallback, Suspense, useRef } from "react";
-import { useSearchParams } from "next/navigation";
 import getAttendence from "@/actions/getAttendance";
 import getGraph from "@/actions/getGraph";
 import getCookie from "@/actions/getCookie";
 import Skeleton from "react-loading-skeleton";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormatDate } from "@/context/DataContext";
 
 import {
