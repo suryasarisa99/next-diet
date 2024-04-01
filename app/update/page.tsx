@@ -53,6 +53,7 @@ export default function Page() {
 function UpdatePage() {
   const [studentAtt, setStudentAtt] = useState<StudentAttedanceType[]>([]);
   const [subjects, setSubjects] = useState<SubjectAttendaceType[]>([]);
+  const [clicks, setClicks] = useState(0);
   const params = useSearchParams();
 
   const section = params.get("section");
@@ -170,6 +171,7 @@ function UpdatePage() {
     resIndex: number
   ) {
     console.log(e.target.checked);
+    setClicks((prv) => prv + 1);
     setStudentAtt((prv) => {
       const item = prv[stdIndex];
       if (item) {
@@ -186,7 +188,10 @@ function UpdatePage() {
 
   return (
     <div className="update page">
-      <p>{date}</p>
+      <div className="top-row">
+        <p>Date: </p>
+        <p>{date}</p>
+      </div>
       <div className="table">
         <div className="row head">
           {[{ name: "", id: "x", subjectType: "" }, ...subjects].map(
@@ -219,7 +224,12 @@ function UpdatePage() {
         })}
       </div>
 
-      <button onClick={handleSubmit}>Submit</button>
+      <div className="bottom-row">
+        <p> Total Clicks {clicks}</p>
+        <button className="btn" onClick={handleSubmit}>
+          Submit
+        </button>
+      </div>
     </div>
   );
 }
