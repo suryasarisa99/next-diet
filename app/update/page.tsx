@@ -119,7 +119,8 @@ function UpdatePage() {
     // }).then((res) => {
     //   console.log(res);
     // });
-    if (!date || !section || !courseId || !branchId || !semester) return;
+    if (!date || !section || !courseId || !branchId || !semester || !batch)
+      return;
     getAttendaceReq(
       {
         date: date,
@@ -144,7 +145,8 @@ function UpdatePage() {
 
   function handleSubmit() {
     if (studentAtt.length === 0 || subjects.length == 0) return;
-    if (!date || !section || !courseId || !branchId || !semester) return;
+    if (!date || !section || !courseId || !branchId || !semester || !batch)
+      return;
 
     PostAttendanceUpdate(
       {
@@ -246,4 +248,8 @@ function UpdatePage() {
       </div>
     </div>
   );
+}
+
+function isNull(value: any) {
+  return value === null || value === undefined;
 }
