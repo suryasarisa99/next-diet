@@ -118,13 +118,14 @@ function UpdatePage() {
     // }).then((res) => {
     //   console.log(res);
     // });
+    if (!date || !section || !courseId || !branchId || !semester) return;
     getAttendaceReq(
       {
-        date: date || "1/02/2024",
-        section: section || "",
-        courseId: courseId || "",
-        semester: semester || "",
-        branchId: branchId || "",
+        date: date,
+        section: section,
+        courseId: courseId,
+        semester: semester,
+        branchId: branchId,
       },
       cookie
     )
@@ -142,6 +143,8 @@ function UpdatePage() {
 
   function handleSubmit() {
     if (studentAtt.length === 0 || subjects.length == 0) return;
+    if (!date || !section || !courseId || !branchId || !semester) return;
+
     PostAttendanceUpdate(
       {
         data: studentAtt,
