@@ -1,7 +1,6 @@
 "use server";
 import axios from "axios";
-import { format } from "./addAttendace/format";
-import { parseTableAsObjects } from "./addAttendace/format";
+import { parseTableAsObjects } from "./format";
 export default async function getAttendenceReport(
   {
     semester = "6",

@@ -5,7 +5,7 @@ export async function parseTableAsObjects(html) {
   const data = [];
   const subjects = [];
 
-  let $ = cheerio.load(html || "");
+  let $ = cheerio.load(html);
   let table = $("table");
 
   let trs = table.find("tr");
@@ -69,5 +69,3 @@ export async function parseTableAsObjects(html) {
   };
   // console.log(typeof table);
 }
-
-parseTableAsObjects();

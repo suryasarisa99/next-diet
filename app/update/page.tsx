@@ -9,8 +9,8 @@ import React, {
 } from "react";
 import getAttendaceReq from "@/actions/getReq";
 import temp from "@/actions/addAttendace/temp.json";
-import PostAttendanceUpdate from "@/actions/addAttendace/postReq";
-// import { useSearchParams } from "next/navigation";
+import PostAttendanceUpdate from "@/actions/postReq";
+import { useSearchParams } from "next/navigation";
 import getCookie from "@/actions/getCookie";
 import getAttendence from "@/actions/getAttendance";
 // doa: '08-Jan-2024',
@@ -42,34 +42,34 @@ type StudentAttedanceType = {
   result: boolean[];
 };
 
-// export default function Page() {
-//   return (
-//     <Suspense>
-//       <UpdatePage />
-//     </Suspense>
-//   );
-// }
+export default function Page() {
+  return (
+    <Suspense>
+      <UpdatePage />
+    </Suspense>
+  );
+}
 
-export default function UpdatePage() {
+function UpdatePage() {
   const [studentAtt, setStudentAtt] = useState<StudentAttedanceType[]>([]);
   const [subjects, setSubjects] = useState<SubjectAttendaceType[]>([]);
-  // const params = useSearchParams();
+  const params = useSearchParams();
 
-  // const section = params.get("section");
-  // const branchId = params.get("branch");
-  // const semester = params.get("semester");
-  // const courseId = params.get("courseId");
-  // const date = params.get("date");
-  // const batch = params.get("startYear");
-  // const cookieRef = useRef("");
-
-  const section = "2";
-  const branchId = "4";
-  const semester = "6";
-  const courseId = "1";
-  const date = "01/02/2024";
-  const batch = "2021";
+  const section = params.get("section");
+  const branchId = params.get("branch");
+  const semester = params.get("semester");
+  const courseId = params.get("courseId");
+  const date = params.get("date");
+  const batch = params.get("startYear");
   const cookieRef = useRef("");
+
+  // const section = "2";
+  // const branchId = "4";
+  // const semester = "6";
+  // const courseId = "1";
+  // const date = "01/02/2024";
+  // const batch = "2021";
+  // const cookieRef = useRef("");
 
   const [totalData, setTotalData] = useState<AttendaceReportType>({
     data: [],
@@ -83,7 +83,6 @@ export default function UpdatePage() {
   });
 
   useEffect(() => {
-    if (typeof Window === undefined) return;
     const cookie = JSON.parse(localStorage.getItem("teacher-cookie") || "null");
     console.log(cookie);
     if (cookie) {
