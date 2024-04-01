@@ -12,6 +12,7 @@ import temp from "@/actions/addAttendace/temp.json";
 import PostAttendanceUpdate from "@/actions/addAttendace/postReq";
 // import { useSearchParams } from "next/navigation";
 import getCookie from "@/actions/getCookie";
+import getAttendence from "@/actions/getAttendance";
 // doa: '08-Jan-2024',
 // tableName: 'tblBTech_4_5_1',
 // semesterId: 6,
@@ -82,6 +83,7 @@ export default function UpdatePage() {
   });
 
   useEffect(() => {
+    if (typeof Window === undefined) return;
     const cookie = JSON.parse(localStorage.getItem("teacher-cookie") || "null");
     console.log(cookie);
     if (cookie) {
@@ -91,18 +93,39 @@ export default function UpdatePage() {
           console.log("cookie expired in update page");
           localStorage.setItem("teacher-cookie", JSON.stringify(cookieRes));
           cookieRef.current = cookieRes.cookie;
-          request(cookieRes.cookie);
+          // request(cookieRes.cookie);
+          getAttendence({
+            cookie: cookieRef.current,
+            from: "",
+            to: "",
+            excludeOtherSubjects: true,
+            rollNo: "21u41a0506",
+          });
         });
       } else {
         cookieRef.current = cookie.cookie;
-        request(cookie.cookie);
+        // request(cookie.cookie);
+        getAttendence({
+          cookie: cookieRef.current,
+          from: "",
+          to: "",
+          excludeOtherSubjects: true,
+          rollNo: "21u41a0506",
+        });
       }
     } else {
       console.log("no cookie in  update page");
       getCookie("892", "1234").then((cookieRes) => {
         localStorage.setItem("teacher-cookie", JSON.stringify(cookieRes));
         cookieRef.current = cookieRes.cookie;
-        request(cookieRes.cookie);
+        // request(cookieRes.cookie);
+        getAttendence({
+          cookie: cookie.current,
+          from: "",
+          to: "",
+          excludeOtherSubjects: true,
+          rollNo: "21u41a0506",
+        });
       });
     }
   }, []);
