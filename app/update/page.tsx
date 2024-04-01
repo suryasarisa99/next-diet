@@ -7,7 +7,7 @@ import React, {
   ChangeEvent,
   Suspense,
 } from "react";
-import getAttendaceReq from "@/actions/addAttendace/getReq";
+import getAttendaceReq from "@/actions/getReq";
 import temp from "@/actions/addAttendace/temp.json";
 import PostAttendanceUpdate from "@/actions/addAttendace/postReq";
 // import { useSearchParams } from "next/navigation";
@@ -110,35 +110,35 @@ export default function UpdatePage() {
   }, []);
 
   function request(cookie: string) {
-    getAttendence({
-      cookie: cookie,
-      from: "",
-      to: "",
-      excludeOtherSubjects: true,
-      rollNo: "21u41a0506",
-    }).then((res) => {
-      console.log(res);
-    });
-    // getAttendaceReq(
-    //   {
-    //     date: date || "1/02/2024",
-    //     section: section || "",
-    //     courseId: courseId || "",
-    //     semester: semester || "",
-    //     branchId: branchId || "",
-    //   },
-    //   cookie
-    // )
-    //   .then((res) => {
-    //     console.log(res);
-    //     setTotalData(res as AttendaceReportType);
-    //     setStudentAtt(res.data);
-    //     setSubjects(res.subjects);
-    //   })
-    //   .catch((err) => {
-    //     console.warn("some error occured");
-    //     console.log(err);
-    //   });
+    // getAttendence({
+    //   cookie: cookie,
+    //   from: "",
+    //   to: "",
+    //   excludeOtherSubjects: true,
+    //   rollNo: "21u41a0506",
+    // }).then((res) => {
+    //   console.log(res);
+    // });
+    getAttendaceReq(
+      {
+        date: date || "1/02/2024",
+        section: section || "",
+        courseId: courseId || "",
+        semester: semester || "",
+        branchId: branchId || "",
+      },
+      cookie
+    )
+      .then((res) => {
+        console.log(res);
+        setTotalData(res as AttendaceReportType);
+        setStudentAtt(res.data);
+        setSubjects(res.subjects);
+      })
+      .catch((err) => {
+        console.warn("some error occured");
+        console.log(err);
+      });
   }
 
   function handleSubmit() {
