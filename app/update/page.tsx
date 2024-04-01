@@ -93,64 +93,52 @@ export default function UpdatePage() {
           console.log("cookie expired in update page");
           localStorage.setItem("teacher-cookie", JSON.stringify(cookieRes));
           cookieRef.current = cookieRes.cookie;
-          // request(cookieRes.cookie);
-          getAttendence({
-            cookie: cookieRef.current,
-            from: "",
-            to: "",
-            excludeOtherSubjects: true,
-            rollNo: "21u41a0506",
-          });
+          request(cookieRes.cookie);
         });
       } else {
         cookieRef.current = cookie.cookie;
-        // request(cookie.cookie);
-        getAttendence({
-          cookie: cookieRef.current,
-          from: "",
-          to: "",
-          excludeOtherSubjects: true,
-          rollNo: "21u41a0506",
-        });
+        request(cookie.cookie);
       }
     } else {
       console.log("no cookie in  update page");
       getCookie("892", "1234").then((cookieRes) => {
         localStorage.setItem("teacher-cookie", JSON.stringify(cookieRes));
         cookieRef.current = cookieRes.cookie;
-        // request(cookieRes.cookie);
-        getAttendence({
-          cookie: cookie.current,
-          from: "",
-          to: "",
-          excludeOtherSubjects: true,
-          rollNo: "21u41a0506",
-        });
+        request(cookieRes.cookie);
       });
     }
   }, []);
 
   function request(cookie: string) {
-    getAttendaceReq(
-      {
-        date: date || "1/02/2024",
-        section: section || "",
-        courseId: courseId || "",
-        semester: semester || "",
-        branchId: branchId || "",
-      },
-      cookie
-    )
-      .then((res) => {
-        console.log(res);
-        setTotalData(res as AttendaceReportType);
-        setStudentAtt(res.data);
-        setSubjects(res.subjects);
-      })
-      .catch((err) => {
-        console.warn("some error occured");
-        console.log(err);
-      });
+    getAttendence({
+      cookie: cookie,
+      from: "",
+      to: "",
+      excludeOtherSubjects: true,
+      rollNo: "21u41a0506",
+    }).then((res) => {
+      console.log(res);
+    });
+    // getAttendaceReq(
+    //   {
+    //     date: date || "1/02/2024",
+    //     section: section || "",
+    //     courseId: courseId || "",
+    //     semester: semester || "",
+    //     branchId: branchId || "",
+    //   },
+    //   cookie
+    // )
+    //   .then((res) => {
+    //     console.log(res);
+    //     setTotalData(res as AttendaceReportType);
+    //     setStudentAtt(res.data);
+    //     setSubjects(res.subjects);
+    //   })
+    //   .catch((err) => {
+    //     console.warn("some error occured");
+    //     console.log(err);
+    //   });
   }
 
   function handleSubmit() {
