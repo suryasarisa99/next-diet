@@ -15,6 +15,10 @@ export default function TestPage() {
     e.preventDefault();
     console.log("submitting", date, section, branch, semester, startYear);
     let d = formatDate(date);
+    if (!date) return alert("Please enter date");
+    if (!date || !section || !branch || !semester || !startYear || !courseId)
+      return alert("Please fill all the fields");
+
     router.push(
       `/update?date=${d}&section=${section}&branch=${branch}&semester=${semester}&startYear=${startYear}&courseId=${courseId}`
     );
