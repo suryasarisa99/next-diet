@@ -189,8 +189,22 @@ function UpdatePage() {
   return (
     <div className="update page">
       <div className="top-row">
-        <p>Date: </p>
-        <p>{date}</p>
+        <div className="part">
+          <p>Branch: </p>
+          <p>{branchId}</p>
+        </div>
+        <div className="part">
+          <p>Section: </p>
+          <p>{section}</p>
+        </div>
+        <div className="part">
+          <p>RollNo: </p>
+          <p>{studentAtt?.[0]?.rollNo.substring(0, 8)}</p>
+        </div>
+        <div className="part">
+          <p>Date: </p>
+          <p>{date}</p>
+        </div>
       </div>
       <div className="table">
         <div className="row head">
