@@ -10,7 +10,7 @@ import React, {
 import getAttendaceReq from "@/actions/addAttendace/getReq";
 import temp from "@/actions/addAttendace/temp.json";
 import PostAttendanceUpdate from "@/actions/addAttendace/postReq";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import getCookie from "@/actions/getCookie";
 // doa: '08-Jan-2024',
 // tableName: 'tblBTech_4_5_1',
@@ -41,18 +41,18 @@ type StudentAttedanceType = {
   result: boolean[];
 };
 
-export default function Page() {
-  return (
-    <Suspense>
-      <UpdatePage />
-    </Suspense>
-  );
-}
+// export default function Page() {
+//   return (
+//     <Suspense>
+//       <UpdatePage />
+//     </Suspense>
+//   );
+// }
 
-function UpdatePage() {
+export default function UpdatePage() {
   const [studentAtt, setStudentAtt] = useState<StudentAttedanceType[]>([]);
   const [subjects, setSubjects] = useState<SubjectAttendaceType[]>([]);
-  const params = useSearchParams();
+  // const params = useSearchParams();
 
   // const section = params.get("section");
   // const branchId = params.get("branch");
