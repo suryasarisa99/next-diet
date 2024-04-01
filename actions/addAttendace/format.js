@@ -1,3 +1,4 @@
+"use server";
 const cheerio = require("cheerio");
 
 export async function parseTableAsObjects(html) {
