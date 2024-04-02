@@ -11,10 +11,16 @@ export default async function getAttendenceReport(
   },
   cookie
 ) {
-  // cse branch: 4, cse data science: 14, AI & ML: 13
   // note: semesterId is 0 indexed, 6 semester means give 5
   // course id: 1 for btech, 5 for diploma
   // section 1 means "A", 2 means "B", 3 means "C"
+  // branches:
+  //  1: civil
+  //  2: eee
+  //  3: ece
+  //  4: cse
+  //  13: csm
+  //  14: csd
 
   const body = `courseId=${courseId}\r\nbranchId=${branchId}\r\nsemesterId=${
     semester - 1

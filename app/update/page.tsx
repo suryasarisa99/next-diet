@@ -35,6 +35,7 @@ type SubjectAttendaceType = {
   subjectType: string;
 };
 type StudentAttedanceType = {
+  name: string;
   index: number;
   batch: string;
   id: string;
@@ -86,26 +87,19 @@ function UpdatePage() {
   useEffect(() => {
     const cookie = JSON.parse(localStorage.getItem("teacher-cookie") || "null");
     console.log(cookie);
-    if (cookie) {
-      const expire = new Date(cookie.expire).getTime() + 1000 * 60 * 60 * 4;
-      if (expire < Date.now()) {
-        getCookie("892", "1234").then((cookieRes) => {
-          console.log("cookie expired in update page");
-          localStorage.setItem("teacher-cookie", JSON.stringify(cookieRes));
-          cookieRef.current = cookieRes.cookie;
-          request(cookieRes.cookie);
-        });
-      } else {
-        cookieRef.current = cookie.cookie;
-        request(cookie.cookie);
-      }
-    } else {
-      console.log("no cookie in  update page");
-      getCookie("892", "1234").then((cookieRes) => {
+    if (
+      !cookie ||
+      new Date(cookie.expire).getTime() + 1000 * 60 * 60 * 4 < Date.now()
+    ) {
+      getCookie("606", "1234").then((cookieRes) => {
+        console.log("cookie expired in update page");
         localStorage.setItem("teacher-cookie", JSON.stringify(cookieRes));
         cookieRef.current = cookieRes.cookie;
         request(cookieRes.cookie);
       });
+    } else {
+      cookieRef.current = cookie.cookie;
+      request(cookie.cookie);
     }
   }, []);
 
@@ -144,9 +138,14 @@ function UpdatePage() {
   }
 
   function handleSubmit() {
+    const supportedBranchIds = ["4", "13", "14"];
     if (studentAtt.length === 0 || subjects.length == 0) return;
     if (!date || !section || !courseId || !branchId || !semester || !batch)
       return;
+    if (!supportedBranchIds.includes(branchId))
+      return alert(
+        "Currently I Don't Know How to Format Data To Post the Attendance, For Your Branch"
+      );
 
     PostAttendanceUpdate(
       {
@@ -161,9 +160,14 @@ function UpdatePage() {
       },
       batch || undefined,
       cookieRef.current
-    ).then((res) => {
-      console.log(res);
-    });
+    )
+      .then((res) => {
+        console.log(res);
+        if (res === "''") alert("Update Sucessfully");
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   }
 
   function handleCheckBox(
@@ -199,7 +203,7 @@ function UpdatePage() {
           <p>Section: </p>
           <p>{section}</p>
         </div>
-        <div className="part">
+        <div className="part short-roll">
           <p>RollNo: </p>
           <p>{studentAtt?.[0]?.rollNo.substring(0, 8)}</p>
         </div>
@@ -212,18 +216,29 @@ function UpdatePage() {
         <div className="row head">
           {[{ name: "", id: "x", subjectType: "" }, ...subjects].map(
             (sub, sIndex) => {
-              return (
-                <p key={sub.id} className="subject">
-                  {sub.name}
-                </p>
-              );
+              if (sIndex == 0) {
+                return (
+                  <p key={sIndex} className="subject">
+                    <span className="short-roll">rno</span>
+                    <span className="long-roll">Roll No</span>
+                  </p>
+                );
+              } else {
+                return (
+                  <p key={sIndex} className="subject">
+                    {sub.name}
+                  </p>
+                );
+              }
             }
           )}
         </div>
         {studentAtt.map((std, stdInd) => {
           return (
             <div className="student row" key={std.id}>
-              <p className="roll-no">{std.rollNo?.substring(8)}</p>
+              <p className="roll-no short-roll">{std.rollNo?.substring(8)}</p>
+              <p className="roll-no long-roll">{std.rollNo}</p>
+              {/* <p className="roll-no long-roll">{std.name}</p> */}
               {std.result.map((res, resInd) => {
                 return (
                   <input

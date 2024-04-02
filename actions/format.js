@@ -6,7 +6,7 @@ export async function parseTableAsObjects(html) {
   const subjects = [];
 
   let $ = cheerio.load(html);
-  let table = $("table");
+  const table = $("table");
 
   let trs = table.find("tr");
 
@@ -31,8 +31,11 @@ export async function parseTableAsObjects(html) {
       subjects.push(subject);
     });
 
+  const studentRows = table.find("tr[name='student']");
+  console.log("len:", studentRows.length);
+
   //* Loop over Attendace Rows:
-  trs.slice(4).each((_, tr) => {
+  studentRows.each((_, tr) => {
     let tds = $(tr).find("td");
     const item = {};
     const result = [];

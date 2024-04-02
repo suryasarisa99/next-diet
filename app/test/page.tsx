@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 export default function TestPage() {
   const [date, setDate] = useState("");
-  const [section, setSection] = useState(2);
+  const [section, setSection] = useState(1);
   const [branch, setBranch] = useState(4);
   const [semester, setSemester] = useState(6);
   const [startYear, setStartYear] = useState(2021);

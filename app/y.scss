@@ -49,8 +49,6 @@
 }
 
 .update.page {
-  padding: 20px 5px;
-
   .top-row {
     display: flex;
     flex-wrap: wrap;
@@ -73,12 +71,13 @@
     justify-content: space-between;
     padding: 4px 10px;
     button {
-      padding: 8px;
+      padding: 8px 20px;
+      font-size: 18px;
       background-color: var(--secondary-color);
       border: 0px;
       color: black;
       border-radius: 7px;
-      margin: 10px 20px;
+      margin: 15px 20px;
     }
   }
   .table {
@@ -92,13 +91,8 @@
     }
 
     .head.row {
-      .subject:first-child {
-        min-width: 22px;
-        // background-color: red;
-      }
       .subject {
         acent-color: var(--secondary-color);
-        font-size: 12px;
         // text-transform: lowercase;
         // font-variant: small-caps;
         text-align: center;
@@ -119,6 +113,64 @@
     .subject {
       min-width: 40px;
       flex-grow: 1;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    padding: 20px 5px;
+    .short-roll {
+      display: block;
+    }
+    .long-roll {
+      display: none;
+    }
+    .head.row {
+      .subject:first-child {
+        min-width: 24px;
+      }
+      .subject {
+        font-size: 14px;
+      }
+    }
+  }
+
+  @media screen and (min-width: 600px) and (max-width: 800px) {
+    padding: 20px 5px;
+    .short-roll,
+    .top-row > .part.short-roll {
+      display: none;
+    }
+    .long-roll {
+      display: block;
+    }
+    .head.row {
+      .subject:first-child {
+        min-width: 100px;
+        flex-shrink: 0;
+      }
+      .subject {
+        font-size: 18px;
+      }
+    }
+  }
+
+  @media screen and (min-width: 801px) {
+    padding: 20px 40px;
+    .short-roll,
+    .top-row > .part.short-roll {
+      display: none;
+    }
+    .long-roll {
+      display: block;
+    }
+    .head.row {
+      .subject:first-child {
+        min-width: 100px;
+        flex-shrink: 0;
+      }
+      .subject {
+        font-size: 18px;
+      }
     }
   }
 }
