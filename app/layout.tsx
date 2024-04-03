@@ -4,6 +4,7 @@ import "./index.scss";
 import "./y.scss";
 
 import { DataProvider } from "@/context/DataContext";
+import { UpdateProvider } from "@/context/UpdateContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <DataProvider>
-        <body className={inter.className}>{children}</body>
+        <UpdateProvider>
+          <body className={inter.className}>{children}</body>
+        </UpdateProvider>
       </DataProvider>
     </html>
   );

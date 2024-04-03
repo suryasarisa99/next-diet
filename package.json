@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -H 192.168.0.169 -p 4444",
-    "mob": "next dev -H 192.168.28.101 -p 4444",
+    "mob": "next dev -H 192.168.38.101 -p 4444",
     "local": "next dev",
     "build": "next build",
     "start": "next start",

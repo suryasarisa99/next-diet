@@ -6,10 +6,21 @@
   box-sizing: border-box;
 }
 
+select,
+input[type="date"] {
+  width: 200px !important;
+  flex-grow: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background-color: black;
+  border: none;
+  border: 1px solid gray;
+  background-position: center right;
+}
 .test {
   display: flex;
   justify-content: center;
-  padding-top: 20%;
+  padding-top: 10%;
   height: 100vh;
   form {
     display: flex;
@@ -17,6 +28,7 @@
     flex-direction: column;
     width: 88%;
     max-width: 600px;
+    // align-items: center;
     .row {
       display: flex;
       align-items: center;
@@ -37,6 +49,13 @@
       }
     }
 
+    .btn-row {
+      padding-top: 30px;
+      // background-color: red;
+      display: flex;
+      justify-content: center;
+    }
+
     button {
       padding: 8px 20px;
       background-color: var(--secondary-color);
@@ -44,11 +63,28 @@
       border-radius: 4px;
       color: black;
       font-size: 18px;
+      max-width: 300px;
     }
   }
 }
 
 .update.page {
+  .head-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 20px;
+  }
+  .prv-next-btn {
+    background-color: rgb(26, 26, 26);
+    background-color: transparent;
+    border: none;
+    padding: 6px 15px;
+
+    .icon {
+      font-size: 22px;
+      color: var(--secondary-color);
+    }
+  }
   .top-row {
     display: flex;
     flex-wrap: wrap;
@@ -85,6 +121,7 @@
       display: flex;
       gap: 8px;
       padding: 6px;
+      align-items: center;
     }
     input {
       accent-color: var(--secondary-color);
@@ -121,12 +158,14 @@
     .short-roll {
       display: block;
     }
-    .long-roll {
-      display: none;
+    .long-roll,
+    .xlong-roll {
+      display: none !important;
+      // background-color: red;
     }
     .head.row {
       .subject:first-child {
-        min-width: 24px;
+        min-width: 18px;
       }
       .subject {
         font-size: 14px;
@@ -140,7 +179,13 @@
     .top-row > .part.short-roll {
       display: none;
     }
-    .long-roll {
+    .name,
+    .xlong-roll {
+      width: 250px;
+      // margin-left: 20px;
+    }
+    .long-roll,
+    .xlong-roll {
       display: block;
     }
     .head.row {
@@ -160,7 +205,12 @@
     .top-row > .part.short-roll {
       display: none;
     }
-    .long-roll {
+    .name,
+    .xlong-roll {
+      width: 300px;
+    }
+    .long-roll,
+    .xlong-roll {
       display: block;
     }
     .head.row {
