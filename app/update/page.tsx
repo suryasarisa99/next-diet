@@ -219,6 +219,12 @@ function UpdatePage() {
     });
   }
 
+  function handleDateChange(e: ChangeEvent<HTMLInputElement>) {
+    setDate(e.target.value);
+    const d = new Date(e.target.value);
+    dateRef.current = formatDate(d.toISOString().substring(0, 10));
+  }
+
   function handleNextDate() {
     let d = new Date(date);
     d.setDate(d.getDate() + 1);
@@ -244,11 +250,7 @@ function UpdatePage() {
           <FaChevronLeft className="icon" />
         </button>
 
-        <input
-          type="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
-        />
+        <input type="date" onChange={handleDateChange} value={date} />
         <button onClick={handleNextDate} className="prv-next-btn">
           <FaChevronRight className="icon" />
         </button>
