@@ -25,7 +25,8 @@ export default function useUpdate() {
 }
 
 export function UpdateProvider({ children }: { children: React.ReactNode }) {
-  const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
+  // const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
+  const [date, setDate] = useState("");
   const [section, setSection] = useState("1");
   const [branch, setBranch] = useState("4");
   const [semester, setSemester] = useState("5");

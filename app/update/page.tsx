@@ -25,6 +25,7 @@ import { FaChevronRight, FaChevronLeft } from "react-icons/fa6";
 export type AttendaceReportType = {
   data: StudentAttedanceType[];
   subjects: StudentAttedanceType[];
+  labs: LabsType;
   doa: string;
   tableName: string;
   semesterId: number;
@@ -32,6 +33,17 @@ export type AttendaceReportType = {
   courseId: number;
   branchId: number;
 };
+
+export type LabsSubType = {
+  input: boolean;
+  selected: string;
+  value: string;
+};
+export type LabsType = {
+  0: LabsSubType;
+  1: LabsSubType;
+}[];
+
 type SubjectAttendaceType = {
   name: string;
   id: string;
@@ -81,6 +93,7 @@ function UpdatePage() {
   const defaultTotalData = {
     data: [],
     subjects: [],
+    labs: [],
     doa: "",
     tableName: "",
     semesterId: 0,
@@ -92,6 +105,7 @@ function UpdatePage() {
     useState<AttendaceReportType>(defaultTotalData);
 
   useEffect(() => {
+    setDate(dateFromUrl as string);
     console.log("renderd again");
   }, []);
 
@@ -148,7 +162,7 @@ function UpdatePage() {
       cookie
     )
       .then((res) => {
-        console.log(res);
+        console.log(res.labs);
         setTotalData(res as AttendaceReportType);
         setStudentAtt(JSON.parse(JSON.stringify(res.data)));
         setSubjects(res.subjects);
@@ -171,10 +185,10 @@ function UpdatePage() {
       !batch
     )
       return;
-    if (!supportedBranchIds.includes(branchId))
-      return alert(
-        "Currently I Don't Know How to Format Data To Post the Attendance, For Your Branch"
-      );
+    // if (!supportedBranchIds.includes(branchId))
+    //   return alert(
+    //     "Currently I Don't Know How to Format Data To Post the Attendance, For Your Branch"
+    //   );
 
     PostAttendanceUpdate(
       {
@@ -186,6 +200,7 @@ function UpdatePage() {
         section: totalData.section,
         courseId: totalData.courseId,
         branchId: totalData.branchId,
+        labs: totalData.labs,
       },
       batch || undefined,
       cookieRef.current

@@ -4,6 +4,7 @@ const cheerio = require("cheerio");
 export async function parseTableAsObjects(html) {
   const data = [];
   const subjects = [];
+  console.log(html);
 
   let $ = cheerio.load(html);
   const table = $("table");
@@ -30,6 +31,8 @@ export async function parseTableAsObjects(html) {
       };
       subjects.push(subject);
     });
+
+  const labs = formatLabs(table, $);
 
   const studentRows = table.find("tr[name='student']");
   console.log("len:", studentRows.length);
@@ -69,6 +72,46 @@ export async function parseTableAsObjects(html) {
     data,
     doa,
     tableName,
+    labs,
   };
   // console.log(typeof table);
+}
+
+function formatLabs(table, $) {
+  const trLabs = $(table).find("tr#trlabs");
+
+  if (
+    trLabs.attr("style") === "display:none" ||
+    trLabs.attr("style") === "display: none" ||
+    trLabs.attr("style") === "display: none;" ||
+    trLabs.attr("style") === "display:none;"
+  ) {
+    console.log("Labs not available");
+    return [];
+  }
+
+  const labsRow = $("tr#trlabs>td").slice(2);
+
+  if (labsRow.length === 0) {
+    console.log("No labs found");
+    return;
+  }
+  const labs = [];
+
+  labsRow.each((_, lab) => {
+    const trs = $(lab).find("tr");
+    const ob = {};
+    trs.each((_, tr) => {
+      const tds = $(tr).find("td");
+      const input = tds.eq(0).find("input");
+      const selected = tds.eq(1).find("select option:selected");
+      ob[_ + 1] = {
+        input: input.attr("checked") ? true : false,
+        selected: selected.text(),
+        value: selected.attr("value"),
+      };
+    });
+    labs.push(ob);
+  });
+  return labs;
 }

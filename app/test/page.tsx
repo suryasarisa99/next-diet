@@ -15,6 +15,7 @@ export default function TestPage() {
     date,
     setDate,
     startYear,
+    setStartYear,
   } = useUpdate();
 
   const router = useRouter();
@@ -167,7 +168,7 @@ export default function TestPage() {
           />
         </div>
 
-        {/* <div className="row">
+        <div className="row">
           <p className="title">Batch Start Year</p>
           <input
             type="number"
@@ -176,7 +177,7 @@ export default function TestPage() {
             onChange={(e) => setStartYear(parseInt(e.target.value))}
             value={startYear}
           />
-        </div> */}
+        </div>
         {/* <div className="row">
           <p className="title">Course Type</p>
           <input
