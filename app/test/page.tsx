@@ -19,6 +19,58 @@ export default function TestPage() {
 
   const router = useRouter();
 
+  const CourseToBranchMap = {
+    1: {
+      name: "Btech",
+      branches: {
+        1: "Civil",
+        2: "EEE",
+        3: "ECE",
+        4: "CSE",
+        13: "CSM",
+        14: "CSD",
+      },
+      semesters: {
+        0: "1 - 1",
+        1: "1 - 2",
+        2: "2 - 1",
+        3: "2 - 2",
+        4: "3 - 1",
+        5: "3 - 2",
+        6: "4 - 1",
+      },
+    },
+    5: {
+      name: "Diploma",
+      branches: {
+        // 1: "Civil",
+        // 4: "CSE",
+        10: "ECE",
+        12: "EEE",
+      },
+      semesters: {
+        21: "1 - 1",
+        22: "1 - 2",
+        23: "2 - 1",
+        24: "2 - 2",
+        25: "3 - 1",
+        26: "3 - 2",
+      },
+    },
+    3: {
+      name: "MBA",
+      branches: {
+        5: "MBA",
+      },
+      semesters: {
+        14: "1 MBA  1-Sem",
+        15: "1 MBA  2-Sem",
+        16: "2 MBA  1-Sem",
+        17: "2 MBA  2-Sem",
+      },
+    },
+  };
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("submitting", date, section, branch, semester, startYear);
@@ -44,14 +96,55 @@ export default function TestPage() {
     <div className="test">
       <form onSubmit={handleSubmit}>
         <div className="row">
+          <p className="title">Course : </p>
+          <select
+            value={courseId}
+            onChange={(e) => {
+              let c = +e.target.value as 1 | 5 | 3;
+              setSemester(Object.keys(CourseToBranchMap[c].semesters)[0]);
+              setBranch(Object.keys(CourseToBranchMap[c].branches)[0]);
+              setCourseId(c);
+            }}
+          >
+            <option value={1}>Btech</option>
+            <option value={5}>Diploma</option>
+            <option value={3}>MBA</option>
+          </select>
+        </div>
+        <div className="row">
           <p className="title">Branch : </p>
-          <select value={branch} onChange={(e) => setBranch(e.target.value)}>
-            <option value={1}>Civil</option>
-            <option value={2}>ECE</option>
-            <option value={3}>EEE</option>
-            <option value={4}>CSE</option>
-            <option value={13}>CSM</option>
-            <option value={14}>CSD</option>
+          <select
+            value={branch}
+            onChange={(e) => setBranch(e.target.value)}
+            disabled={isNull(branch)}
+          >
+            {Object.entries(CourseToBranchMap[courseId].branches).map(
+              ([k, value]) => {
+                return (
+                  <option key={k} value={k}>
+                    {value}
+                  </option>
+                );
+              }
+            )}
+          </select>
+          <p></p>
+        </div>
+        <div className="row">
+          <p className="title">Smester : </p>
+          <select
+            value={semester}
+            onChange={(e) => setSemester(e.target.value)}
+          >
+            {Object.entries(CourseToBranchMap[courseId].semesters).map(
+              ([k, value]) => {
+                return (
+                  <option key={k} value={k}>
+                    {value}
+                  </option>
+                );
+              }
+            )}
           </select>
         </div>
         <div className="row">
@@ -62,22 +155,7 @@ export default function TestPage() {
             <option value={3}> C Section</option>
           </select>
         </div>
-        <div className="row">
-          <p className="title">Semester : </p>
-          <select
-            value={semester}
-            onChange={(e) => setSemester(e.target.value)}
-          >
-            <option value={1}>1 - 1</option>
-            <option value={2}>1 - 2</option>
-            <option value={3}>2 - 1</option>
-            <option value={4}>2 - 2</option>
-            <option value={5}>3 - 1</option>
-            <option value={6}>3 - 2</option>
-            <option value={7}>4 - 1</option>
-            <option value={8}>4 - 2</option>
-          </select>
-        </div>
+
         <div className="row">
           <p className="title">Date : </p>
           <input

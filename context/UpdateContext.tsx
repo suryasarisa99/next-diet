@@ -7,13 +7,13 @@ type UpdateContextProps = {
   branch: string;
   semester: string;
   startYear: number;
-  courseId: number;
+  courseId: 1 | 5 | 3;
   setDate: React.Dispatch<React.SetStateAction<string>>;
   setSection: React.Dispatch<React.SetStateAction<string>>;
   setBranch: React.Dispatch<React.SetStateAction<string>>;
   setSemester: React.Dispatch<React.SetStateAction<string>>;
   setStartYear: React.Dispatch<React.SetStateAction<number>>;
-  setCourseId: React.Dispatch<React.SetStateAction<number>>;
+  setCourseId: React.Dispatch<React.SetStateAction<1 | 5 | 3>>;
 };
 
 export const UpdateContext = createContext<UpdateContextProps>(
@@ -30,7 +30,7 @@ export function UpdateProvider({ children }: { children: React.ReactNode }) {
   const [branch, setBranch] = useState("4");
   const [semester, setSemester] = useState("6");
   const [startYear, setStartYear] = useState(2021);
-  const [courseId, setCourseId] = useState(1);
+  const [courseId, setCourseId] = useState<1 | 5 | 3>(1);
 
   const value = {
     date,
