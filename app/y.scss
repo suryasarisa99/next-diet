@@ -74,6 +74,10 @@ input[type="date"] {
     justify-content: space-between;
     padding: 4px 20px;
   }
+  .short-roll,
+  .long-roll {
+    cursor: pointer;
+  }
   .prv-next-btn {
     background-color: rgb(26, 26, 26);
     background-color: transparent;

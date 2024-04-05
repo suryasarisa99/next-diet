@@ -24,10 +24,13 @@ export default function Home() {
   const { rollno, setRollno, currentUser, validateCookie } = useData();
   const monthRef = useRef<HTMLInputElement>(null);
   const week = [
-    { name: "b Weeek", to: `/result?rollno=${rollno}&week=bweek` },
-    { name: "This Week", to: `/result?rollno=${rollno}&week=this` },
-    { name: "Yesterday", to: `/result?rollno=${rollno}&week=yesterday` },
-    { name: "Today", to: `/result?rollno=${rollno}&week=today` },
+    { name: "b Weeek", to: `/result?rollno=${rollno}&week=bweek&graphs=yes` },
+    { name: "This Week", to: `/result?rollno=${rollno}&week=this&graphs=yes` },
+    {
+      name: "Yesterday",
+      to: `/result?rollno=${rollno}&week=yesterday&graphs=yes`,
+    },
+    { name: "Today", to: `/result?rollno=${rollno}&week=today&graphs=yes` },
   ];
 
   useEffect(() => {
@@ -45,12 +48,12 @@ export default function Home() {
   function handleAttendance() {
     const from = FormatDate(date.from);
     const to = FormatDate(date.to);
-    router.push(`/result?rollno=${rollno}&from=${from}&to=${to}`);
+    router.push(`/result?rollno=${rollno}&from=${from}&to=${to}&graphs=yes`);
   }
 
   function onMonthChange(e: React.ChangeEvent<HTMLInputElement>) {
     const month = FormatDate(e.target.value);
-    router.push(`/result/?rollno=${rollno}&month=${month}`);
+    router.push(`/result/?rollno=${rollno}&month=${month}&graphs=yes`);
   }
 
   // if (!currentUser)
@@ -186,6 +189,15 @@ export default function Home() {
       <button onClick={handleAttendance} className="attendance-button">
         Attendance
       </button>
+
+      <button
+        onClick={() => router.push("/test")}
+        className="attendance-button"
+      >
+        ECAP
+      </button>
+
+      {/* <Link href="/test">Update</Link> */}
     </div>
   );
 }

@@ -10,11 +10,12 @@ import React, {
 import getAttendaceReq from "@/actions/getReq";
 import temp from "@/actions/addAttendace/temp.json";
 import PostAttendanceUpdate from "@/actions/postReq";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import getCookie from "@/actions/getCookie";
 import getAttendence from "@/actions/getAttendance";
 import useUpdate from "@/context/UpdateContext";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa6";
+
 // doa: '08-Jan-2024',
 // tableName: 'tblBTech_4_5_1',
 // semesterId: 6,
@@ -67,6 +68,7 @@ function UpdatePage() {
   const dateRef = useRef(formatDate(dateFromUrl as string));
   const batch = params.get("startYear");
   const cookieRef = useRef("");
+  const router = useRouter();
 
   // const section = "2";
   // const branchId = "4";
@@ -148,7 +150,7 @@ function UpdatePage() {
       .then((res) => {
         console.log(res);
         setTotalData(res as AttendaceReportType);
-        setStudentAtt(res.data);
+        setStudentAtt(JSON.parse(JSON.stringify(res.data)));
         setSubjects(res.subjects);
       })
       .catch((err) => {
@@ -204,7 +206,6 @@ function UpdatePage() {
     resIndex: number
   ) {
     console.log(e.target.checked);
-    setClicks((prv) => prv + 1);
     setStudentAtt((prv) => {
       const item = prv[stdIndex];
       if (item) {
@@ -217,6 +218,9 @@ function UpdatePage() {
       }
       return prv;
     });
+    setTimeout(() => {
+      setClicks(compareArr(totalData.data, studentAtt));
+    }, 20);
   }
 
   function handleDateChange(e: ChangeEvent<HTMLInputElement>) {
@@ -241,6 +245,17 @@ function UpdatePage() {
     let dstr = d.toISOString().substring(0, 10);
     setDate(dstr);
     dateRef.current = formatDate(dstr);
+  }
+  function handleViewResult(rollno: string) {
+    // router.push(`/result?rollno=${rollno}&from=''&to=''`);
+    window.open(
+      `https://999-diet.vercel.app/result?rollno=${rollno}&from=''&to=''`,
+      "__blank"
+    );
+    // window.open(
+    //   `http://localhost:3000/result?rollno=${rollno}&from=''&to=''&graphs=no`,
+    //   "__blank"
+    // );
   }
 
   return (
@@ -308,8 +323,18 @@ function UpdatePage() {
         {studentAtt.map((std, stdInd) => {
           return (
             <div className="student row" key={std.id}>
-              <p className="roll-no short-roll">{std.rollNo?.substring(8)}</p>
-              <p className="roll-no long-roll">{std.rollNo}</p>
+              <p
+                className="roll-no short-roll"
+                onClick={() => handleViewResult(std.rollNo)}
+              >
+                {std.rollNo?.substring(8)}
+              </p>
+              <p
+                className="roll-no long-roll"
+                onClick={() => handleViewResult(std.rollNo)}
+              >
+                {std.rollNo}
+              </p>
               <p className="name xlong-roll">{std.name}</p>
               {std.result.map((res, resInd) => {
                 return (
@@ -328,7 +353,7 @@ function UpdatePage() {
       </div>
 
       <div className="bottom-row">
-        <p> Total Clicks {clicks}</p>
+        <p> Total Changes {clicks}</p>
         <button className="btn" onClick={handleSubmit}>
           Submit
         </button>
@@ -351,4 +376,29 @@ function formatDate(d: string): string {
   const [year, month, day] = d.split("-");
 
   return day + "/" + month + "/" + year;
+}
+
+function compareArr(a1: StudentAttedanceType[], a2: StudentAttedanceType[]) {
+  //  compare count matching values
+  let changes = 0;
+  console.log("compare again > ");
+  console.log(a1);
+  console.log(a2);
+  for (let i = 0; i < a1.length; i++) {
+    // if (!a1[i].result) {
+    //   console.log(a1[i]);
+    //   console.log("return compare arr: index: ", i);
+    //   return changes;
+    // }
+
+    for (let j = 0; j < a1[i].result?.length; j++) {
+      if (a1[i].result[j] !== a2[i].result[j]) {
+        changes++;
+        console.log("not same");
+      } else {
+        // console.log("same");
+      }
+    }
+  }
+  return changes;
 }

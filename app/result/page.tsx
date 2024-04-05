@@ -41,6 +41,7 @@ function ResultPage() {
   const to = params.get("to");
   const month = params.get("month");
   const week = params.get("week");
+  const showGraphs = params.get("graphs");
   const subjectGraphRef = useRef<HTMLDivElement>(null);
   const [selectedSubject, setSelectedSubject] = useState<number>(0);
   const router = useRouter();
@@ -62,6 +63,7 @@ function ResultPage() {
   type SortONType = "subject" | "held" | "attend" | "percent";
 
   const [sortOn, setSortOn] = useState<SortONType>("percent");
+  const [graphsLoading, setGraphsLoading] = useState(false);
 
   const handleAttendance = useCallback(
     (
@@ -124,7 +126,10 @@ function ResultPage() {
           true
         );
       } else {
-        handleGraphData(rollno, currentUser?.cookie || "");
+        if (showGraphs === "yes") {
+          setGraphsLoading(true);
+          handleGraphData(rollno, currentUser?.cookie || "");
+        }
       }
     },
     [rollno, currentUser]
@@ -143,9 +148,8 @@ function ResultPage() {
       from: from,
     })
       .then((res) => {
-        console.log(res);
-
         if (!update) {
+          if (res?.[0]?.total?.held == "Password") return;
           const graphData = FormatGraphData(res as GraphResType);
           const subjectsGraphData = FormatSubjects(res as GraphResType);
           setGraphData(graphData);
@@ -305,134 +309,138 @@ function ResultPage() {
 
   return (
     <div className="results-page">
-      <div className="graph-boxes">
-        <div className="graph">
-          {graphData.length > 0 ? (
-            <ResponsiveContainer width={"100%"} height={320}>
-              <LineChart data={graphData}>
-                <Line
-                  type="monotone"
-                  dataKey="held"
-                  stroke="#82ca9d"
-                  strokeWidth={2}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="attend"
-                  stroke="#8884d8"
-                  strokeWidth={2}
-                />
-                <CartesianGrid stroke="#4d4d4d9c" />
-                {/* <XAxis dataKey="name" /> */}
+      {(graphsLoading || graphData.length > 0) && (
+        <div className="graph-boxes">
+          <div className="graph">
+            {graphData.length > 0 ? (
+              <ResponsiveContainer width={"100%"} height={320}>
+                <LineChart data={graphData}>
+                  <Line
+                    type="monotone"
+                    dataKey="held"
+                    stroke="#82ca9d"
+                    strokeWidth={2}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="attend"
+                    stroke="#8884d8"
+                    strokeWidth={2}
+                  />
+                  <CartesianGrid stroke="#4d4d4d9c" />
+                  {/* <XAxis dataKey="name" /> */}
 
-                {/* <YAxis
+                  {/* <YAxis
                   allowDataOverflow={false}
                   allowDecimals={true}
                   domain={[0, 60]}
                 /> */}
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#2a2a2a",
-                    border: "0px",
-                    borderRadius: "8px",
-                  }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className="skt-lg">
-              <div className="skt"></div>
-            </div>
-          )}
-        </div>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#2a2a2a",
+                      border: "0px",
+                      borderRadius: "8px",
+                    }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="skt-lg">
+                <div className="skt"></div>
+              </div>
+            )}
+          </div>
 
-        <div className="subjects">
-          {subjectsGraphData.length > 0
-            ? subjectsGraphData
-                .filter((subjectGraphData) => {
-                  return subjectGraphData.some((subject) => {
-                    return +subject.held > 0;
-                  });
-                })
-                .map((subjectGraphData, sub_index) => {
-                  return (
-                    <p
-                      key={subjectGraphData[0].subject}
-                      className={selectedSubject == sub_index ? "selected" : ""}
-                      onClick={() => {
-                        if (subjectGraphRef.current)
-                          subjectGraphRef.current.scrollIntoView({
-                            behavior: "smooth",
-                            block: "nearest",
-                          });
-                        setSelectedSubject(sub_index);
-                      }}
-                    >
-                      {subjectGraphData[0].subject}{" "}
-                    </p>
-                  );
-                })
-            : Array(9)
-                .fill(0)
-                .map((_, i) => {
-                  return (
-                    <div className="skt-sm" key={i}>
-                      <div className="skt"> </div>
-                    </div>
-                  );
-                })}
-        </div>
+          <div className="subjects">
+            {subjectsGraphData.length > 0
+              ? subjectsGraphData
+                  .filter((subjectGraphData) => {
+                    return subjectGraphData.some((subject) => {
+                      return +subject.held > 0;
+                    });
+                  })
+                  .map((subjectGraphData, sub_index) => {
+                    return (
+                      <p
+                        key={subjectGraphData[0].subject}
+                        className={
+                          selectedSubject == sub_index ? "selected" : ""
+                        }
+                        onClick={() => {
+                          if (subjectGraphRef.current)
+                            subjectGraphRef.current.scrollIntoView({
+                              behavior: "smooth",
+                              block: "nearest",
+                            });
+                          setSelectedSubject(sub_index);
+                        }}
+                      >
+                        {subjectGraphData[0].subject}{" "}
+                      </p>
+                    );
+                  })
+              : Array(9)
+                  .fill(0)
+                  .map((_, i) => {
+                    return (
+                      <div className="skt-sm" key={i}>
+                        <div className="skt"> </div>
+                      </div>
+                    );
+                  })}
+          </div>
 
-        <div className="graph" ref={subjectGraphRef}>
-          {selectedSubject > -1 && subjectsGraphData.length > 0 ? (
-            <ResponsiveContainer
-              width={"100%"}
-              height={320}
-              key={subjectsGraphData[selectedSubject][0].subject}
-            >
-              <LineChart
+          <div className="graph" ref={subjectGraphRef}>
+            {selectedSubject > -1 && subjectsGraphData.length > 0 ? (
+              <ResponsiveContainer
+                width={"100%"}
+                height={320}
                 key={subjectsGraphData[selectedSubject][0].subject}
-                data={subjectsGraphData[selectedSubject]}
               >
-                <Line
-                  type="monotone"
-                  dataKey="held"
-                  stroke="#82ca9d"
-                  strokeWidth={2}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="attend"
-                  stroke="#8884d8"
-                  strokeWidth={2}
-                />
-                <CartesianGrid stroke="#6a6a6a77" />
-                {/* <XAxis dataKey="name" /> */}
+                <LineChart
+                  key={subjectsGraphData[selectedSubject][0].subject}
+                  data={subjectsGraphData[selectedSubject]}
+                >
+                  <Line
+                    type="monotone"
+                    dataKey="held"
+                    stroke="#82ca9d"
+                    strokeWidth={2}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="attend"
+                    stroke="#8884d8"
+                    strokeWidth={2}
+                  />
+                  <CartesianGrid stroke="#6a6a6a77" />
+                  {/* <XAxis dataKey="name" /> */}
 
-                {/* <YAxis
+                  {/* <YAxis
                   allowDataOverflow={false}
                   allowDecimals={true}
                   domain={[0, 8]}
                 /> */}
-                <Tooltip
-                  key={
-                    subjectsGraphData[selectedSubject][0].subject + "tooltip"
-                  }
-                  contentStyle={{
-                    backgroundColor: "#2a2a2a",
-                    border: "0px",
-                    borderRadius: "8px",
-                  }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className="skt-lg">
-              <div className="skt"></div>
-            </div>
-          )}
+                  <Tooltip
+                    key={
+                      subjectsGraphData[selectedSubject][0].subject + "tooltip"
+                    }
+                    contentStyle={{
+                      backgroundColor: "#2a2a2a",
+                      border: "0px",
+                      borderRadius: "8px",
+                    }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="skt-lg">
+                <div className="skt"></div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="right-side">
         <div className="bio">
