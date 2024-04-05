@@ -38,6 +38,7 @@ export default function TestPage() {
         4: "3 - 1",
         5: "3 - 2",
         6: "4 - 1",
+        7: "4 - 2",
       },
     },
     5: {

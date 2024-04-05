@@ -22,9 +22,7 @@ export default async function getAttendenceReport(
   //  13: csm
   //  14: csd
 
-  const body = `courseId=${courseId}\r\nbranchId=${branchId}\r\nsemesterId=${
-    semester - 1
-  }\r\nsection=${section}\r\ndoa=${date}\r\nallowNew=false\r\nallowEdit=true\r\ncheckType=A`;
+  const body = `courseId=${courseId}\r\nbranchId=${branchId}\r\nsemesterId=${semester}\r\nsection=${section}\r\ndoa=${date}\r\nallowNew=false\r\nallowEdit=true\r\ncheckType=A`;
 
   return axios
     .post(
@@ -49,7 +47,7 @@ export default async function getAttendenceReport(
     .then((res) => {
       let cleaned = res.data.replace(/\\\'/g, "");
       return parseTableAsObjects(cleaned).then((data) => {
-        data.semesterId = semester - 1;
+        data.semesterId = semester;
         data.section = section;
         data.courseId = courseId;
         data.branchId = branchId;

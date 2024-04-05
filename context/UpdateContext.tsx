@@ -28,7 +28,7 @@ export function UpdateProvider({ children }: { children: React.ReactNode }) {
   const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
   const [section, setSection] = useState("1");
   const [branch, setBranch] = useState("4");
-  const [semester, setSemester] = useState("6");
+  const [semester, setSemester] = useState("5");
   const [startYear, setStartYear] = useState(2021);
   const [courseId, setCourseId] = useState<1 | 5 | 3>(1);
 
