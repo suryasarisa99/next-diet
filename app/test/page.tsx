@@ -128,7 +128,6 @@ export default function TestPage() {
               }
             )}
           </select>
-          <p></p>
         </div>
         <div className="row">
           <p className="title">Smester : </p>
