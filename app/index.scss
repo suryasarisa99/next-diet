@@ -11,7 +11,9 @@
 
   --primary-color: #82ca9d;
   // --secondary-color: #8a92cb;
-  --secondary-color: #8f8bda;
+  // --secondary-color: #8f8bda;
+  --secondary-color: #4571ffdb;
+  --on-sec: #fcfcfc;
 }
 
 html {
@@ -133,7 +135,7 @@ body {
       border-radius: 8px;
       font-size: 18px;
       border: 0px;
-      color: rgb(0, 0, 0);
+      color: var(--on-sec);
       display: flex;
       flex-shrink: 0;
       align-items: center;
@@ -177,15 +179,15 @@ body {
     display: flex;
     align-items: center;
     background-color: var(--secondary-color);
-    border: 0;
+    background-color: black;
+    border: 1px solid gray;
     padding: 5px 8px;
     border-radius: 6px;
     min-width: 100px;
     justify-content: space-between;
     font-size: 18px;
     gap: 10px;
-    color: black;
-    font-weight: 500;
+    color: rgb(194, 194, 194);
   }
   .rollNo-input {
     border: 0;
@@ -208,7 +210,7 @@ body {
     height: 0px;
     overflow: hidden;
     background-color: var(--secondary-color);
-    color: black;
+    color: var(--on-sec);
     border: 0;
     border-radius: 6px;
     padding: 4px 8px;
@@ -260,7 +262,7 @@ body {
 
   .attendance-button {
     background-color: var(--secondary-color);
-    color: rgb(0, 0, 0);
+    color: var(--on-sec);
     border: 0;
     padding: 6px 24px;
     border-radius: 8px;
@@ -740,5 +742,127 @@ body {
   @include mobile-sm {
     flex-direction: column;
     padding: 5px 2px;
+  }
+}
+
+#overlay {
+  position: fixed;
+  top: 0px;
+  // bottom: 0px;
+  height: 100dvh;
+  left: 0px;
+  right: 0px;
+  background-color: #000000b5;
+  z-index: 1;
+  // background-color: red;
+}
+.hidden {
+  display: none;
+}
+.dialog {
+  padding: 15px 20px;
+  border-radius: 12px;
+  background-color: #2e2e2e;
+  color: white;
+  position: absolute;
+  box-shadow: 4px 8px 20px 5px #17171792;
+  top: 50%;
+  left: 50%;
+  min-width: 365px;
+  max-width: 600px;
+  translate: -50% -50%;
+
+  border: 1px solid rgb(78, 78, 78);
+
+  z-index: 1;
+  overflow: auto;
+
+  .title {
+    font-size: 20px;
+    padding: 4px 8px;
+    margin-bottom: 20px;
+  }
+  .desc {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    // margin: 0 -10px;
+    max-height: 400px;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    scrollbar-width: 0px;
+
+    .item-outer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #4f4f4f;
+      margin-bottom: 8px;
+      padding-bottom: 5px;
+      gap: 20px;
+
+      .count-value {
+        color: #20ff88;
+        // background-color: #ff4d4d;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-size: 18px;
+      }
+    }
+    .item {
+      padding: 6px 0px;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      @media screen and (width >= 600px) {
+        flex-direction: row;
+        gap: 20px;
+      }
+    }
+  }
+
+  .changes {
+    display: flex;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    gap: 20px;
+
+    .changes-value {
+      color: rgb(42, 242, 142);
+    }
+  }
+  .flex {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+
+    button {
+      color: white;
+      border-radius: 8px;
+      border: none;
+      padding: 6px 12px;
+    }
+    .cancel {
+      background-color: #464646;
+
+      &:hover {
+        background-color: #525252;
+        box-sizing: 4px 4px 8px 2px #17171792;
+      }
+    }
+    .confirm {
+      background-color: var(--secondary-color);
+    }
+    // background-color: red;
   }
 }

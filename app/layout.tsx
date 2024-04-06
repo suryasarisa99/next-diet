@@ -23,7 +23,10 @@ export default function RootLayout({
     <html lang="en">
       <DataProvider>
         <UpdateProvider>
-          <body className={inter.className}>{children}</body>
+          <body className={inter.className}>
+            {children}
+            <div id="overlay" className="hidden"></div>
+          </body>
         </UpdateProvider>
       </DataProvider>
     </html>

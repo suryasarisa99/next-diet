@@ -15,6 +15,7 @@ import getCookie from "@/actions/getCookie";
 import getAttendence from "@/actions/getAttendance";
 import useUpdate from "@/context/UpdateContext";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa6";
+import { createPortal } from "react-dom";
 
 // doa: '08-Jan-2024',
 // tableName: 'tblBTech_4_5_1',
@@ -58,6 +59,12 @@ type StudentAttedanceType = {
   result: boolean[];
 };
 
+type ChangeType = {
+  name: string;
+  rollno: string;
+  changes: number;
+};
+
 export default function Page() {
   return (
     <Suspense>
@@ -69,7 +76,7 @@ export default function Page() {
 function UpdatePage() {
   const [studentAtt, setStudentAtt] = useState<StudentAttedanceType[]>([]);
   const [subjects, setSubjects] = useState<SubjectAttendaceType[]>([]);
-  const [clicks, setClicks] = useState(0);
+  const [changes, setChanges] = useState<ChangeType[]>([]);
   const params = useSearchParams();
   const { date, setDate } = useUpdate();
   const section = params.get("section");
@@ -103,7 +110,7 @@ function UpdatePage() {
   };
   const [totalData, setTotalData] =
     useState<AttendaceReportType>(defaultTotalData);
-
+  const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
     setDate(dateFromUrl as string);
     console.log("renderd again");
@@ -185,11 +192,22 @@ function UpdatePage() {
       !batch
     )
       return;
+
     // if (!supportedBranchIds.includes(branchId))
     //   return alert(
     //     "Currently I Don't Know How to Format Data To Post the Attendance, For Your Branch"
     //   );
 
+    const r = compareArr2(studentAtt, totalData.data);
+
+    setChanges(r);
+
+    openOverlay();
+    return;
+  }
+
+  function handleConfirm() {
+    closeOverlay();
     PostAttendanceUpdate(
       {
         data: studentAtt,
@@ -233,9 +251,6 @@ function UpdatePage() {
       }
       return prv;
     });
-    setTimeout(() => {
-      setClicks(compareArr(totalData.data, studentAtt));
-    }, 20);
   }
 
   function handleDateChange(e: ChangeEvent<HTMLInputElement>) {
@@ -272,6 +287,22 @@ function UpdatePage() {
     //   "__blank"
     // );
   }
+  function closeOverlay() {
+    console.log("close");
+    setShowOverlay(false);
+    const overlay = document.getElementById("overlay") as HTMLElement;
+    overlay.className = "hidden";
+    const body = document.querySelector("body") as HTMLElement;
+    body.style.overflow = "auto";
+  }
+
+  function openOverlay() {
+    setShowOverlay(true);
+    const overlay = document.getElementById("overlay") as HTMLElement;
+    overlay.className = "visible";
+    const body = document.querySelector("body") as HTMLElement;
+    body.style.overflow = "hidden";
+  }
 
   return (
     <div className="update page">
@@ -285,6 +316,50 @@ function UpdatePage() {
           <FaChevronRight className="icon" />
         </button>
       </div>
+
+      {showOverlay &&
+        createPortal(
+          <div className="dialog">
+            <p className="title">Update</p>
+            <div className="desc">
+              Please Confirm The Changes You Made to Attedance
+            </div>
+            <div className="list">
+              {changes.map((change, index) => {
+                return (
+                  <div className="item-outer" key={index}>
+                    <div className="item">
+                      <div className="roll">{change.rollno}</div>
+                      <div className="name">{change.name}</div>
+                    </div>
+                    <span className="count-value">
+                      {change.changes > 0 && "+"}
+                      {change.changes}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="changes">
+              Total Changes:
+              <span className="changes-value">
+                {changes.reduce(
+                  (state, current) => (state += current.changes),
+                  0
+                )}
+              </span>
+            </div>
+            <div className="flex">
+              <button className="cancel" onClick={closeOverlay}>
+                Cancel
+              </button>
+              <button className="confirm" onClick={handleConfirm}>
+                Confirm
+              </button>
+            </div>
+          </div>,
+          document.getElementById("overlay") as HTMLElement
+        )}
 
       <div className="top-row">
         <div className="part">
@@ -368,7 +443,6 @@ function UpdatePage() {
       </div>
 
       <div className="bottom-row">
-        <p> Total Changes {clicks}</p>
         <button className="btn" onClick={handleSubmit}>
           Submit
         </button>
@@ -400,12 +474,6 @@ function compareArr(a1: StudentAttedanceType[], a2: StudentAttedanceType[]) {
   console.log(a1);
   console.log(a2);
   for (let i = 0; i < a1.length; i++) {
-    // if (!a1[i].result) {
-    //   console.log(a1[i]);
-    //   console.log("return compare arr: index: ", i);
-    //   return changes;
-    // }
-
     for (let j = 0; j < a1[i].result?.length; j++) {
       if (a1[i].result[j] !== a2[i].result[j]) {
         changes++;
@@ -416,4 +484,28 @@ function compareArr(a1: StudentAttedanceType[], a2: StudentAttedanceType[]) {
     }
   }
   return changes;
+}
+
+function compareArr2(a1: StudentAttedanceType[], a2: StudentAttedanceType[]) {
+  //  compare count matching values
+  console.log("compare again > ");
+  console.log(a1);
+  console.log(a2);
+  const result = [];
+  for (let i = 0; i < a1.length; i++) {
+    let obj = { name: "", rollno: "", changes: 0 };
+    for (let j = 0; j < a1[i].result?.length; j++) {
+      if (a1[i].result[j] !== a2[i].result[j]) {
+        obj.name = a1[i].name;
+        obj.rollno = a1[i].rollNo;
+        obj.changes++;
+      } else {
+        // console.log("same");
+      }
+    }
+    if (obj.changes > 0) {
+      result.push(obj);
+    }
+  }
+  return result;
 }

@@ -132,7 +132,7 @@ export default function TestPage() {
           </select>
         </div>
         <div className="row">
-          <p className="title">Smester : </p>
+          <p className="title">Semester : </p>
           <select
             value={semester}
             onChange={(e) => setSemester(e.target.value)}
