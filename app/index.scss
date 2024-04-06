@@ -791,7 +791,7 @@ body {
     display: flex;
     flex-direction: column;
     // margin: 0 -10px;
-    max-height: 400px;
+    max-height: 380px;
     overflow: auto;
 
     &::-webkit-scrollbar {
@@ -862,6 +862,7 @@ body {
     }
     .confirm {
       background-color: var(--secondary-color);
+      color: var(--on-sec);
     }
     // background-color: red;
   }

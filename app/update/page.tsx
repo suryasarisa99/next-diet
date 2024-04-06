@@ -117,6 +117,18 @@ function UpdatePage() {
   }, []);
 
   useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeOverlay();
+    });
+
+    return () => {
+      document.removeEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeOverlay();
+      });
+    };
+  }, []);
+
+  useEffect(() => {
     setTotalData(defaultTotalData);
     setStudentAtt([]);
     setSubjects([]);

@@ -158,7 +158,7 @@ input[type="number"] {
     }
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 650px) {
     padding: 20px 5px;
     .short-roll {
       display: block;
@@ -178,7 +178,7 @@ input[type="number"] {
     }
   }
 
-  @media screen and (min-width: 600px) and (max-width: 800px) {
+  @media screen and (min-width: 651px) and (max-width: 800px) {
     padding: 20px 5px;
     .short-roll,
     .top-row > .part.short-roll {
@@ -189,7 +189,10 @@ input[type="number"] {
       width: 250px;
       // margin-left: 20px;
     }
-    .long-roll,
+    .long-roll {
+      display: block;
+      width: 100px;
+    }
     .xlong-roll {
       display: block;
     }
@@ -214,7 +217,10 @@ input[type="number"] {
     .xlong-roll {
       width: 300px;
     }
-    .long-roll,
+    .long-roll {
+      display: block;
+      width: 100px;
+    }
     .xlong-roll {
       display: block;
     }
