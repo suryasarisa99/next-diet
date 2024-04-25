@@ -5,6 +5,7 @@ import "./y.scss";
 
 import { DataProvider } from "@/context/DataContext";
 import { UpdateProvider } from "@/context/UpdateContext";
+import { useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <style>
+        <meta name="theme-color" content="#000000" />
+      </style>
       <DataProvider>
         <UpdateProvider>
           <body className={inter.className}>

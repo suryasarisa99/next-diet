@@ -29,6 +29,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // const [users, setUsers] = useState<UserDataType[]>([]);
   // const [currentUser, setCurrentUser] = useState<UserDataType | null>(null);
   // const [rollno, setRollno] = useState("");
+
+  useEffect(() => {
+    const colorFromRoot =
+      document.documentElement.style.getPropertyValue("--background-50");
+    const theme = document.querySelector("meta[name='theme-color']");
+    theme?.setAttribute("content", colorFromRoot);
+  }, []);
+
   const [users, setUsers] = useState<UserDataType[]>(() => {
     if (typeof window !== "undefined") {
       const users_local = JSON.parse(
