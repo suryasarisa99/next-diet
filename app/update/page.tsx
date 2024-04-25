@@ -204,6 +204,7 @@ function UpdatePage() {
   }
 
   function handleConfirm() {
+    setShowConfirmPopup(false);
     closeOverlay();
     PostAttendanceUpdate(
       {
