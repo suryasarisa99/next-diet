@@ -24,6 +24,8 @@
   --secondary-color: #5086b4;
   --other-color: #bdd3e7;
   --on-other: #2e2e2e;
+  --loading-skt: #eaeaea;
+  --loading-skt-gradient: hsl(209, 100%, 96%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,6 +42,8 @@
     --true-color: #90ee90;
     --other-color: #3e3e54;
     --on-other: #bac4dc;
+    --loading-skt: #141414;
+    --loading-skt-gradietn: hsl(0, 0%, 15%);
   }
 }
 
@@ -467,7 +471,7 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 4px;
-  background: rgb(20, 20, 20);
+  background: var(--loading-skt);
 }
 
 .skt::after {
@@ -480,7 +484,7 @@ body {
   background: linear-gradient(
     to right,
     transparent,
-    hsl(0%, 0%, 15%),
+    var(--loading-skt-gradient),
     transparent
   );
   animation: skeleton-card 0.8s infinite ease-in-out;
