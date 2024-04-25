@@ -17,12 +17,6 @@ import useUpdate from "@/context/UpdateContext";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa6";
 import { createPortal } from "react-dom";
 
-// doa: '08-Jan-2024',
-// tableName: 'tblBTech_4_5_1',
-// semesterId: 6,
-// section: 1,
-// courseId: 1,
-// branchId: 4
 export type AttendaceReportType = {
   data: StudentAttedanceType[];
   subjects: StudentAttedanceType[];
@@ -89,14 +83,6 @@ function UpdatePage() {
   const cookieRef = useRef("");
   const router = useRouter();
 
-  // const section = "2";
-  // const branchId = "4";
-  // const semester = "6";
-  // const courseId = "1";
-  // const date = "01/02/2024";
-  // const batch = "2021";
-  // const cookieRef = useRef("");
-
   const defaultTotalData = {
     data: [],
     subjects: [],
@@ -108,53 +94,57 @@ function UpdatePage() {
     courseId: 0,
     branchId: 0,
   };
+
   const [totalData, setTotalData] =
     useState<AttendaceReportType>(defaultTotalData);
-  const [showOverlay, setShowOverlay] = useState(false);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [showInvalidDate, setShowInvalidDate] = useState(true);
+
   useEffect(() => {
     setDate(dateFromUrl as string);
-    console.log("renderd again");
-  }, []);
-
-  useEffect(() => {
-    document.addEventListener("keydown", (e) => {
+    function handleEscape(e: KeyboardEvent) {
       if (e.key === "Escape") closeOverlay();
-    });
-
-    return () => {
-      document.removeEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeOverlay();
-      });
-    };
+    }
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, []);
-
-  useEffect(() => {
-    setTotalData(defaultTotalData);
-    setStudentAtt([]);
-    setSubjects([]);
-  }, [date]);
 
   useEffect(() => {
     if (date && date != dateRef.current) {
       setDate(date);
       dateRef.current = formatDate(date);
     }
+    setTotalData(defaultTotalData);
+    setStudentAtt([]);
+    setSubjects([]);
+  }, [date]);
+
+  useEffect(() => {
     const cookie = JSON.parse(localStorage.getItem("teacher-cookie") || "null");
-    console.log(cookie);
+    if (cookie) {
+      console.log(
+        "Cookie is expired for: ",
+        (
+          (new Date(cookie.expire).getTime() +
+            1000 * 60 * 60 * 2 -
+            Date.now()) /
+          (1000 * 60 * 60)
+        ).toFixed(2),
+        " hrs"
+      );
+    }
     if (
       !cookie ||
-      new Date(cookie.expire).getTime() + 1000 * 60 * 60 * 4 < Date.now()
+      new Date(cookie.expire).getTime() + 1000 * 60 * 60 * 2 < Date.now()
     ) {
       getCookie("606", "1234").then((cookieRes) => {
         console.log("cookie expired in update page");
         localStorage.setItem("teacher-cookie", JSON.stringify(cookieRes));
         cookieRef.current = cookieRes.cookie;
-        // console.log(dateRef.current, date);
         request(cookieRes.cookie);
       });
     } else {
       cookieRef.current = cookie.cookie;
-      // console.log(dateRef.current, date);
       request(cookie.cookie);
     }
   }, [date]);
@@ -169,7 +159,7 @@ function UpdatePage() {
       !batch
     )
       return;
-    console.log(dateRef.current);
+    console.log("Attendace Req is processing....");
     getAttendaceReq(
       {
         date: dateRef.current,
@@ -181,6 +171,7 @@ function UpdatePage() {
       cookie
     )
       .then((res) => {
+        console.log(res);
         console.log(res.labs);
         setTotalData(res as AttendaceReportType);
         setStudentAtt(JSON.parse(JSON.stringify(res.data)));
@@ -188,7 +179,9 @@ function UpdatePage() {
       })
       .catch((err) => {
         console.warn("some error occured");
-        console.log(err);
+        setShowInvalidDate(true);
+        openOverlay();
+        console.log(err.message);
       });
   }
 
@@ -205,17 +198,9 @@ function UpdatePage() {
     )
       return;
 
-    // if (!supportedBranchIds.includes(branchId))
-    //   return alert(
-    //     "Currently I Don't Know How to Format Data To Post the Attendance, For Your Branch"
-    //   );
-
-    const r = compareArr2(studentAtt, totalData.data);
-
-    setChanges(r);
-
+    setChanges(compareArr(studentAtt, totalData.data));
+    setShowConfirmPopup(true);
     openOverlay();
-    return;
   }
 
   function handleConfirm() {
@@ -242,6 +227,11 @@ function UpdatePage() {
       .catch((err) => {
         alert(err.message);
       });
+  }
+
+  function handleCancelConfirm() {
+    setShowConfirmPopup(false);
+    closeOverlay();
   }
 
   function handleCheckBox(
@@ -301,7 +291,6 @@ function UpdatePage() {
   }
   function closeOverlay() {
     console.log("close");
-    setShowOverlay(false);
     const overlay = document.getElementById("overlay") as HTMLElement;
     overlay.className = "hidden";
     const body = document.querySelector("body") as HTMLElement;
@@ -309,7 +298,6 @@ function UpdatePage() {
   }
 
   function openOverlay() {
-    setShowOverlay(true);
     const overlay = document.getElementById("overlay") as HTMLElement;
     overlay.className = "visible";
     const body = document.querySelector("body") as HTMLElement;
@@ -329,7 +317,32 @@ function UpdatePage() {
         </button>
       </div>
 
-      {showOverlay &&
+      {showInvalidDate &&
+        createPortal(
+          <div className="dialog invalid-date-dialog">
+            <p className="title">Invalid Date</p>
+            <div className="desc">
+              {/* Invalid date selection(holiday/not in acadamiccalender/exam held) */}
+              Invalid Date Selection, there May Be a Holiday or Exam Held or Not
+              in Academic Calender
+            </div>
+
+            <div className="flex">
+              <button
+                className="confirm ok-btn"
+                onClick={() => {
+                  setShowInvalidDate(false);
+                  closeOverlay();
+                }}
+              >
+                Ok
+              </button>
+            </div>
+          </div>,
+          document.getElementById("overlay") as HTMLElement
+        )}
+
+      {showConfirmPopup &&
         createPortal(
           <div className="dialog">
             <p className="title">Update</p>
@@ -362,7 +375,7 @@ function UpdatePage() {
               </span>
             </div>
             <div className="flex">
-              <button className="cancel" onClick={closeOverlay}>
+              <button className="cancel" onClick={handleCancelConfirm}>
                 Cancel
               </button>
               <button className="confirm" onClick={handleConfirm}>
@@ -480,29 +493,6 @@ function formatDate(d: string): string {
 }
 
 function compareArr(a1: StudentAttedanceType[], a2: StudentAttedanceType[]) {
-  //  compare count matching values
-  let changes = 0;
-  console.log("compare again > ");
-  console.log(a1);
-  console.log(a2);
-  for (let i = 0; i < a1.length; i++) {
-    for (let j = 0; j < a1[i].result?.length; j++) {
-      if (a1[i].result[j] !== a2[i].result[j]) {
-        changes++;
-        console.log("not same");
-      } else {
-        // console.log("same");
-      }
-    }
-  }
-  return changes;
-}
-
-function compareArr2(a1: StudentAttedanceType[], a2: StudentAttedanceType[]) {
-  //  compare count matching values
-  console.log("compare again > ");
-  console.log(a1);
-  console.log(a2);
   const result = [];
   for (let i = 0; i < a1.length; i++) {
     let obj = { name: "", rollno: "", changes: 0 };
@@ -511,8 +501,6 @@ function compareArr2(a1: StudentAttedanceType[], a2: StudentAttedanceType[]) {
         obj.name = a1[i].name;
         obj.rollno = a1[i].rollNo;
         obj.changes++;
-      } else {
-        // console.log("same");
       }
     }
     if (obj.changes > 0) {

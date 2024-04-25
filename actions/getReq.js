@@ -44,8 +44,16 @@ export default async function getAttendenceReport(
         },
       }
     )
-    .then((res) => {
+    .then(async (res) => {
       let cleaned = res.data.replace(/\\\'/g, "");
+      if (
+        cleaned ===
+        "'<span class=style24>Invalid date selection(holiday/not in acadamiccalender/exam held)</span>'"
+      ) {
+        throw new Error(
+          "Invalid date selection(holiday/not in acadamiccalender/exam held)"
+        );
+      }
       return parseTableAsObjects(cleaned).then((data) => {
         data.semesterId = semester;
         data.section = section;

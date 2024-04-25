@@ -330,11 +330,12 @@ function ResultPage() {
                   <CartesianGrid stroke="#4d4d4d9c" />
                   {/* <XAxis dataKey="name" /> */}
 
-                  {/* <YAxis
-                  allowDataOverflow={false}
-                  allowDecimals={true}
-                  domain={[0, 60]}
-                /> */}
+                  <YAxis
+                    allowDataOverflow={true}
+                    allowDecimals={true}
+                    domain={[0, 60]}
+                    hide={true}
+                  />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "#2a2a2a",
